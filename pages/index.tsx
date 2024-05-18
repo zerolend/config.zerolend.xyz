@@ -21,8 +21,8 @@ import zerolendService from "../services/zerolend";
 const Home: NextPage = () => {
   const [tableData, setTableData] = useState<assetType[] | undefined>([]);
   const [market, setMarket] = useState<any>();
-  const [selectedMarket, setSelectedMarket] = useState<string>("");
-  const [protocol, setProtocol] = useState<string>("v3");
+  const [selectedMarket, setSelectedMarket] = useState<string>("linea");
+  const [protocol, setProtocol] = useState<string>("zerolend");
   const [protocolSelected, setProtocolSelected] = useState<boolean>(true);
   const [marketSelected, setMarketSelected] = useState<boolean>(false);
   const [marketLoading, setMarketLoading] = useState<boolean>(false);
@@ -30,13 +30,13 @@ const Home: NextPage = () => {
   const [darkMode, setDarkMode] = useState<boolean>(true);
 
   useEffect(() => {
-    setMarket(markets.v3);
-    setSelectedMarket("ethereum");
-    const ethereum: any = markets.v3.find(
-      (n: { name: string }) => n.name === "ethereum"
+    setMarket(markets.zerolend);
+    setSelectedMarket("linea");
+    const ethereum: any = markets.zerolend.find(
+      (n: { name: string }) => n.name === "linea"
     );
 
-    aaveService(ethereum.config, protocol).then((data) => {
+    zerolendService(ethereum.config, protocol).then((data) => {
       setTableData(data);
       setMarketSelected(true);
     });
