@@ -3,7 +3,8 @@ import { headers } from '../utils/headers'
 import { assetType } from '../utils/interfaces'
 
 const ColourText = (props: { text: string }) => {
-  const color = props.text == 'True' ? '#A1DD70' : props.text == 'False' ? '#f44' : props.text == 'N/A' ? '#999' : 'inherit'
+  const color = props.text == 'True' ? '#A1DD70' : props.text == 'False' ? '#f44' :
+    props.text == 'N/A' ? '#999' : props.text == '0%' ? '#999' : 'inherit'
 
   return (
     <TableCell sx={{ color }} align="center">{props.text}</TableCell>
