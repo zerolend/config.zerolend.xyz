@@ -46,7 +46,7 @@ export const headers = {
     "asset",
     "frozen",
     "paused",
-    "can collateral",
+    "collateral?",
     "LTV",
     "liquidation thereshold",
     "liquidation bonus",

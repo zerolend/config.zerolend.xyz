@@ -14,8 +14,6 @@ import Datatable from "../components/Datatable";
 import { markets } from "../utils/markets";
 import { assetType } from "../utils/interfaces";
 
-import aaveService from "../services/aave";
-import benqiService from "../services/benqi";
 import zerolendService from "../services/zerolend";
 
 const Home: NextPage = () => {
@@ -74,33 +72,13 @@ const Home: NextPage = () => {
 
     if (!(event.target.value === "all")) {
       setMarketLoading(true);
-
-      if (protocol === "v2" || protocol === "v3") {
-        const mkt = market?.find(
-          (n: { name: string }) => n.name === event.target.value
-        );
-        aaveService(mkt.config, protocol).then((data) => {
-          setTableData(data);
-          setMarketLoading(false);
-        });
-      } else if (protocol === "benqi") {
-        const mkt = market?.find(
-          (n: { name: string }) => n.name === "avalanche"
-        );
-        benqiService(mkt.config).then((data) => {
-          console.log(data);
-          setTableData(data);
-          setMarketLoading(false);
-        });
-      } else if (protocol === "zerolend") {
-        const mkt = market?.find(
-          (n: { name: string }) => n.name === event.target.value
-        );
-        zerolendService(mkt.config, protocol).then((data) => {
-          setTableData(data);
-          setMarketLoading(false);
-        });
-      }
+      const mkt = market?.find(
+        (n: { name: string }) => n.name === event.target.value
+      );
+      zerolendService(mkt.config, protocol).then((data) => {
+        setTableData(data);
+        setMarketLoading(false);
+      });
     }
   };
 
@@ -155,6 +133,7 @@ const Home: NextPage = () => {
           matches={matches}
           riskParams={tableData}
         />
+
         {marketLoading ? <Loading marketLoading={marketLoading} /> : ""}
 
         <Info

@@ -114,7 +114,7 @@ export default async function handler(
       borrowableInIsolation: n.borrowableInIsolation ? "True" : "False",
       flashloanEnabled: n.flashLoanEnabled ? "True" : "False",
       assetLink:
-        "https://app.aave.com/reserve-overview/?underlyingAsset=" +
+        "https://app.zerolend.xyz/reserve-overview/?underlyingAsset=" +
         n.id.slice(n.id.indexOf("-") + 1, n.id.lastIndexOf("-")) +
         "&marketName=" +
         config.marketName,
