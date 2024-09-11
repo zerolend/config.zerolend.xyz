@@ -72,12 +72,20 @@ export const markets = {
   ],
   zerolend: [
     {
-      name: "ethereum",
-      config: marketConfigZerolend.ethereum,
+      name: "ethereum eth lrt",
+      config: marketConfigZerolend.ethereum_eth_lrt,
+    },
+    {
+      name: "ethereum btc lrt",
+      config: marketConfigZerolend.ethereum_btc_lrt,
     },
     {
       name: "zksync",
       config: marketConfigZerolend.zksync,
+    },
+    {
+      name: "xlayer",
+      config: marketConfigZerolend.xlayer,
     },
     {
       name: "manta",
