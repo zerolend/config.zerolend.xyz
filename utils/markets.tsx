@@ -92,6 +92,10 @@ export const markets = {
       config: marketConfigZerolend.manta,
     },
     {
+      name: "ziruit",
+      config: marketConfigZerolend.zircuit,
+    },
+    {
       name: "linea",
       config: marketConfigZerolend.linea,
     },

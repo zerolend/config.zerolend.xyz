@@ -25,6 +25,14 @@ export const marketConfigZerolend = {
     POOL: '0x4d9429246EA989C9CeE203B43F6d1C7D83e3B8F8',
     marketName: "proto_zksync_era_v3",
   },
+  zircuit: {
+    chainId: 48900,
+    publicJsonRPCUrl: "https://zircuit1-mainnet.p2pify.com/",
+    LENDING_POOL_ADDRESS_PROVIDER: '0xFF679e5B4178A2f74A56f0e2c0e1FA1C80579385',
+    UI_POOL_DATA_PROVIDER: '0x189cfdb4d7a08D926CA209D84a713c4c629645aF',
+    POOL: '0x2774C8B95CaB474D0d21943d83b9322Fb1cE9cF5',
+    marketName: "proto_zksync_era_v3",
+  },
   xlayer: {
     chainId: 196,
     publicJsonRPCUrl: "https://xlayerrpc.okx.com",
