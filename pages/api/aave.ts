@@ -3,6 +3,7 @@ import { Contract, ethers } from "ethers";
 import { UiPoolDataProvider } from "@aave/contract-helpers";
 import { formatReserves } from "@aave/math-utils";
 import dayjs from "dayjs";
+import { compactNumber } from "../../utils/utils";
 
 const chainIdToRPCProvider: Record<number, string> = {
   1: "https://eth-mainnet.alchemyapi.io/v2/demo",
@@ -61,12 +62,10 @@ export default async function handler(
 
     let paused = false;
     if (config.protocol === "v2") {
-      const abi = [
-        "function paused() public view returns (bool)"]
+      const abi = ["function paused() public view returns (bool)"];
       const poolContract = new Contract(config.pool, abi, provider);
       paused = await poolContract.paused();
     }
-
 
     const reserves = await poolDataProviderContract.getReservesHumanized({
       lendingPoolAddressProvider,
@@ -84,82 +83,100 @@ export default async function handler(
     const reservesArray = formattedPoolReserves.map((n) =>
       config.protocol === "v3"
         ? {
-          symbol: n.symbol,
-          frozen: n.isFrozen ? "True" : "False",
-          paused: n.isPaused ? "True" : "False",
-          canCollateral: n.usageAsCollateralEnabled ? "True" : "False",
-          LTV: parseInt(n.baseLTVasCollateral) / 100 + "%",
-          liqThereshold: parseInt(n.reserveLiquidationThreshold) / 100 + "%",
-          liqBonus: parseInt(n.reserveLiquidationBonus.slice(-3)) / 100 + "%",
-          reserveFactor: parseFloat(n.reserveFactor) * 100 + "%",
-          canBorrow: n.borrowingEnabled ? "True" : "False",
-          optimalUtilization:
-            ((parseInt(n.optimalUsageRatio) / 10 ** 27) * 100).toFixed(0) +
-            "%",
-          varBorrowRate:
-            (parseFloat(n.variableBorrowAPY) * 100).toFixed(2) + "%",
-          canBorrowStable: n.stableBorrowRateEnabled ? "True" : "False",
-          stableBorrowRate:
-            (parseFloat(n.stableBorrowAPY) * 100).toFixed(2) + "%",
-          shareOfStableRate:
-            parseInt(n.totalDebtUSD) === 0 ||
+            symbol: n.symbol,
+            frozen: n.isFrozen ? "True" : "False",
+            paused: n.isPaused ? "True" : "False",
+            canCollateral: n.usageAsCollateralEnabled ? "True" : "False",
+            LTV: parseInt(n.baseLTVasCollateral) / 100 + "%",
+            liqThereshold: parseInt(n.reserveLiquidationThreshold) / 100 + "%",
+            liqBonus: parseInt(n.reserveLiquidationBonus.slice(-3)) / 100 + "%",
+            reserveFactor: parseFloat(n.reserveFactor) * 100 + "%",
+            canBorrow: n.borrowingEnabled ? "True" : "False",
+            optimalUtilization:
+              ((parseInt(n.optimalUsageRatio) / 10 ** 27) * 100).toFixed(0) +
+              "%",
+            varBorrowRate:
+              (parseFloat(n.variableBorrowAPY) * 100).toFixed(2) + "%",
+            canBorrowStable: n.stableBorrowRateEnabled ? "True" : "False",
+            stableBorrowRate:
+              (parseFloat(n.stableBorrowAPY) * 100).toFixed(2) + "%",
+            shareOfStableRate:
+              parseInt(n.totalDebtUSD) === 0 ||
               parseInt(n.totalStableDebtUSD) === 0
-              ? "0%"
-              : (
-                (parseInt(n.totalStableDebtUSD) /
-                  parseInt(n.totalDebtUSD)) *
-                100
-              ).toFixed(2) + "%",
-          isIsolated: n.debtCeiling === "0" ? "False" : "True",
-          debtCeiling: n.debtCeiling === "0" ? "N/A" : (parseInt(n.debtCeiling) / 10 ** 8).toFixed(3) + "M",
-          supplyCap: n.supplyCap === "0" ? "N/A" : (parseInt(n.supplyCap) / 10 ** 9).toFixed(4) + "B",
-          borrowCap: n.borrowCap === "0" ? "N/A" : (parseInt(n.borrowCap) / 10 ** 9).toFixed(4) + "B",
-          eModeLtv: n.eModeLtv / 100 + "%",
-          eModeLiquidationThereshold: n.eModeLiquidationThreshold / 100 + "%",
-          eModeLiquidationBonus:
-            parseInt(n.eModeLiquidationBonus.toString().slice(-3)) / 100 +
-            "%",
-          borrowableInIsolation: n.borrowableInIsolation ? "True" : "False",
-          flashloanEnabled: n.flashLoanEnabled ? "True" : "False",
-          assetLink:
-            "https://app.aave.com/reserve-overview/?underlyingAsset=" +
-            n.id.slice(n.id.indexOf("-") + 1, n.id.lastIndexOf("-")) +
-            "&marketName=" +
-            config.marketName,
-        }
+                ? "0%"
+                : (
+                    (parseInt(n.totalStableDebtUSD) /
+                      parseInt(n.totalDebtUSD)) *
+                    100
+                  ).toFixed(2) + "%",
+            isIsolated: n.debtCeiling === "0" ? "False" : "True",
+            debtCeiling:
+              n.debtCeiling === "0"
+                ? "N/A"
+                : compactNumber({ value: n.debtCeiling, visibleDecimals: 2 })
+                    .prefix +
+                  compactNumber({ value: n.debtCeiling, visibleDecimals: 2 })
+                    .postfix,
+            supplyCap:
+              n.supplyCap === "0"
+                ? "N/A"
+                : compactNumber({ value: n.supplyCap, visibleDecimals: 2 })
+                    .prefix +
+                  compactNumber({ value: n.supplyCap, visibleDecimals: 2 })
+                    .postfix,
+            borrowCap:
+              n.borrowCap === "0"
+                ? "N/A"
+                : compactNumber({ value: n.borrowCap, visibleDecimals: 2 })
+                    .prefix +
+                  compactNumber({ value: n.borrowCap, visibleDecimals: 2 })
+                    .postfix,
+            eModeLtv: n.eModeLtv / 100 + "%",
+            eModeLiquidationThereshold: n.eModeLiquidationThreshold / 100 + "%",
+            eModeLiquidationBonus:
+              parseInt(n.eModeLiquidationBonus.toString().slice(-3)) / 100 +
+              "%",
+            borrowableInIsolation: n.borrowableInIsolation ? "True" : "False",
+            flashloanEnabled: n.flashLoanEnabled ? "True" : "False",
+            assetLink:
+              "https://app.aave.com/reserve-overview/?underlyingAsset=" +
+              n.id.slice(n.id.indexOf("-") + 1, n.id.lastIndexOf("-")) +
+              "&marketName=" +
+              config.marketName,
+          }
         : {
-          symbol: n.symbol,
-          frozen: n.isFrozen ? "True" : "False",
-          paused: paused ? "True" : "False",
-          canCollateral: n.usageAsCollateralEnabled ? "True" : "False",
-          LTV: parseInt(n.baseLTVasCollateral) / 100 + "%",
-          liqThereshold: parseInt(n.reserveLiquidationThreshold) / 100 + "%",
-          liqBonus: parseInt(n.reserveLiquidationBonus.slice(-3)) / 100 + "%",
-          reserveFactor: parseFloat(n.reserveFactor) * 100 + "%",
-          canBorrow: n.borrowingEnabled ? "True" : "False",
-          optimalUtilization:
-            ((parseInt(n.optimalUsageRatio) / 10 ** 27) * 100).toFixed(0) +
-            "%",
-          varBorrowRate:
-            (parseFloat(n.variableBorrowAPY) * 100).toFixed(2) + "%",
-          canBorrowStable: n.stableBorrowRateEnabled ? "True" : "False",
-          stableBorrowRate:
-            (parseFloat(n.stableBorrowAPY) * 100).toFixed(2) + "%",
-          shareOfStableRate:
-            parseInt(n.totalDebtUSD) === 0 ||
+            symbol: n.symbol,
+            frozen: n.isFrozen ? "True" : "False",
+            paused: paused ? "True" : "False",
+            canCollateral: n.usageAsCollateralEnabled ? "True" : "False",
+            LTV: parseInt(n.baseLTVasCollateral) / 100 + "%",
+            liqThereshold: parseInt(n.reserveLiquidationThreshold) / 100 + "%",
+            liqBonus: parseInt(n.reserveLiquidationBonus.slice(-3)) / 100 + "%",
+            reserveFactor: parseFloat(n.reserveFactor) * 100 + "%",
+            canBorrow: n.borrowingEnabled ? "True" : "False",
+            optimalUtilization:
+              ((parseInt(n.optimalUsageRatio) / 10 ** 27) * 100).toFixed(0) +
+              "%",
+            varBorrowRate:
+              (parseFloat(n.variableBorrowAPY) * 100).toFixed(2) + "%",
+            canBorrowStable: n.stableBorrowRateEnabled ? "True" : "False",
+            stableBorrowRate:
+              (parseFloat(n.stableBorrowAPY) * 100).toFixed(2) + "%",
+            shareOfStableRate:
+              parseInt(n.totalDebtUSD) === 0 ||
               parseInt(n.totalStableDebtUSD) === 0
-              ? "0%"
-              : (
-                (parseInt(n.totalStableDebtUSD) /
-                  parseInt(n.totalDebtUSD)) *
-                100
-              ).toFixed(2) + "%",
-          assetLink:
-            "https://app.aave.com/reserve-overview/?underlyingAsset=" +
-            n.id.slice(n.id.indexOf("-") + 1, n.id.lastIndexOf("-")) +
-            "&marketName=" +
-            config.marketName,
-        }
+                ? "0%"
+                : (
+                    (parseInt(n.totalStableDebtUSD) /
+                      parseInt(n.totalDebtUSD)) *
+                    100
+                  ).toFixed(2) + "%",
+            assetLink:
+              "https://app.aave.com/reserve-overview/?underlyingAsset=" +
+              n.id.slice(n.id.indexOf("-") + 1, n.id.lastIndexOf("-")) +
+              "&marketName=" +
+              config.marketName,
+          }
     );
 
     res.status(200).json({ data: reservesArray });

@@ -3,6 +3,7 @@ import { Contract, ethers } from "ethers";
 import { UiPoolDataProvider } from "@aave/contract-helpers";
 import { formatReserves } from "@aave/math-utils";
 import dayjs from "dayjs";
+import { compactNumber } from "../../utils/utils";
 
 const chainIdToRPCProvider: Record<number, string> = {
   1: "https://eth-mainnet.alchemyapi.io/v2/demo",
@@ -98,15 +99,18 @@ export default async function handler(
       debtCeiling:
         n.debtCeiling === "0"
           ? "N/A"
-          : (parseInt(n.debtCeiling) / 10 ** 8).toFixed(3) + "M",
+          : compactNumber({ value: n.debtCeiling, visibleDecimals: 2 }).prefix +
+            compactNumber({ value: n.debtCeiling, visibleDecimals: 2 }).postfix,
       supplyCap:
         n.supplyCap === "0"
           ? "N/A"
-          : (parseInt(n.supplyCap) / 10 ** 9).toFixed(4) + "B",
+          : compactNumber({ value: n.supplyCap, visibleDecimals: 2 }).prefix +
+            compactNumber({ value: n.supplyCap, visibleDecimals: 2 }).postfix,
       borrowCap:
         n.borrowCap === "0"
           ? "N/A"
-          : (parseInt(n.borrowCap) / 10 ** 9).toFixed(4) + "B",
+          : compactNumber({ value: n.borrowCap, visibleDecimals: 2 }).prefix +
+            compactNumber({ value: n.borrowCap, visibleDecimals: 2 }).postfix,
       eModeLtv: n.eModeLtv / 100 + "%",
       eModeLiquidationThereshold: n.eModeLiquidationThreshold / 100 + "%",
       eModeLiquidationBonus:
