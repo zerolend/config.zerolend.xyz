@@ -6,7 +6,6 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  TablePagination,
   TableSortLabel,
 } from "@mui/material";
 import { headers } from "../utils/headers";
@@ -46,8 +45,6 @@ const Datatable = (props: {
     }
   }
 
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(12);
   const [order, setOrder] = useState<"asc" | "desc">("asc");
   const [orderBy, setOrderBy] = useState<{
     key: string;
@@ -55,17 +52,6 @@ const Datatable = (props: {
   }>({
     key: "",
   });
-
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
 
   const handleRequestSort = (property: {
     key: string;
@@ -120,11 +106,6 @@ const Datatable = (props: {
       })
     : [];
 
-  const paginatedData = sortedData.slice(
-    page * rowsPerPage,
-    page * rowsPerPage + rowsPerPage
-  );
-
   return (
     <TableContainer
       sx={{
@@ -171,7 +152,7 @@ const Datatable = (props: {
         </TableHead>
         <TableBody>
           {hasURL
-            ? paginatedData.map((n) => (
+            ? sortedData.map((n) => (
                 <TableRow
                   key={props.riskParams?.indexOf(n)}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -193,7 +174,7 @@ const Datatable = (props: {
                   </TableCell>
                 </TableRow>
               ))
-            : paginatedData.map((n) => (
+            : sortedData.map((n) => (
                 <TableRow
                   key={props.riskParams?.indexOf(n)}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -212,15 +193,6 @@ const Datatable = (props: {
               ))}
         </TableBody>
       </Table>
-      <TablePagination
-        rowsPerPageOptions={[12, 24, 48]}
-        component="div"
-        count={props.riskParams ? props.riskParams.length : 0}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
     </TableContainer>
   );
 };
