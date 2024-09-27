@@ -1,15 +1,15 @@
-import React, { useState } from "react";
 import {
-  TableContainer,
   Table,
+  TableBody,
+  TableCell,
+  TableContainer,
   TableHead,
   TableRow,
-  TableCell,
-  TableBody,
   TableSortLabel,
 } from "@mui/material";
+import { useState } from "react";
 import { headers } from "../utils/headers";
-import { assetType } from "../utils/interfaces";
+import { assetType, TableHeader } from "../utils/interfaces";
 import { expandNumber } from "../utils/utils";
 
 const ColourText = (props: { text: string }) => {
@@ -37,13 +37,6 @@ const Datatable = (props: {
   riskParams: assetType[] | undefined;
 }) => {
   type ObjectKey = keyof typeof headers;
-  let hasURL: boolean = false;
-
-  if (props.riskParams) {
-    for (let i = 0; i < props.riskParams.length; i++) {
-      if (props.riskParams[i].assetLink != null) hasURL = true;
-    }
-  }
 
   const [order, setOrder] = useState<"asc" | "desc">("asc");
   const [orderBy, setOrderBy] = useState<{
@@ -120,16 +113,13 @@ const Datatable = (props: {
         <TableHead>
           <TableRow>
             {headers[props.protocol as ObjectKey].map(
-              (
-                n: { key: string; name: string; isPercent?: boolean },
-                index: number
-              ) => (
+              (n: TableHeader, index: number) => (
                 <TableCell
                   align="center"
                   key={index}
                   sortDirection={orderBy.key === n.key ? order : false}
                 >
-                  {n.key !== "symbol" && n.key !== "assetLink" ? (
+                  {n.key !== "symbol" && !n.hasURL ? (
                     <TableSortLabel
                       active={orderBy.key === n.key}
                       direction={orderBy.key === n.key ? order : "asc"}
@@ -151,46 +141,30 @@ const Datatable = (props: {
           </TableRow>
         </TableHead>
         <TableBody>
-          {hasURL
-            ? sortedData.map((n) => (
-                <TableRow
-                  key={props.riskParams?.indexOf(n)}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  {Object.keys(n).length ===
-                  headers[props.protocol as ObjectKey].length
-                    ? Object.values(n).map((k, index) =>
-                        index === Object.keys(n).length - 1 ? (
-                          ""
-                        ) : (
-                          <ColourText text={k} key={index} />
-                        )
-                      )
-                    : ""}
-                  <TableCell align="center">
-                    <a href={n.assetLink} target="_blank" rel="noreferrer">
-                      <u>more info</u>
-                    </a>
-                  </TableCell>
-                </TableRow>
-              ))
-            : sortedData.map((n) => (
-                <TableRow
-                  key={props.riskParams?.indexOf(n)}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  {Object.keys(n).length ===
-                  headers[props.protocol as ObjectKey].length
-                    ? Object.values(n).map((k, index) =>
-                        index === Object.keys(n).length ? (
-                          ""
-                        ) : (
-                          <ColourText text={k} key={index} />
-                        )
-                      )
-                    : ""}
-                </TableRow>
-              ))}
+          {sortedData.map((n, i) => (
+            <TableRow
+              key={props.riskParams?.indexOf(n)}
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+            >
+              {Object.entries(n)
+                .filter(([key, _]) => key !== "type")
+                .map(([_, value], i) => {
+                  const hasURL = headers[props.protocol][i].hasURL;
+
+                  if (hasURL) {
+                    return (
+                      <TableCell align="center">
+                        <a href={value} target="_blank" rel="noreferrer">
+                          <u>{headers[props.protocol][i].textForURL}</u>
+                        </a>
+                      </TableCell>
+                    );
+                  } else {
+                    return <ColourText text={value} key={i} />;
+                  }
+                })}
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </TableContainer>

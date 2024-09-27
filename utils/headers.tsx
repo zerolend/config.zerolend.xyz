@@ -1,4 +1,8 @@
-export const headers = {
+import { TableHeader } from "./interfaces";
+
+export const headers: {
+  [key: string]: TableHeader[];
+} = {
   v2: [
     { name: "asset", key: "symbol" },
     { name: "frozen", key: "frozen" },
@@ -14,7 +18,15 @@ export const headers = {
     { name: "can borrow stable", key: "canBorrowStable" },
     { name: "stable borrow rate", key: "stableBorrowRate", isPercent: true },
     { name: "share of stable rate", key: "shareOfStableRate", isPercent: true },
-    { name: "", key: "assetLink" },
+    // { name: "Utilization Rate", key: "utilizationRate", isPercent: true },
+    // {
+    //   name: "Price Oracle Address",
+    //   key: "priceOracleAddress",
+    //   hasURL: true,
+    //   textForURL: "view in explorer",
+    // },
+    // { name: "Oracle Price", key: "oraclePrice" },
+    { name: "", key: "assetLink", hasURL: true, textForURL: "more info" },
   ],
   v3: [
     { name: "asset", key: "symbol" },
@@ -42,9 +54,17 @@ export const headers = {
       isPercent: true,
     },
     { name: "emode liq bonus", key: "eModeLiquidationBonus", isPercent: true },
-    { name: "borrowable in iso mode", key: "borrowableInIsoMode" },
+    { name: "borrowable in iso mode", key: "borrowableInIsolation" },
     { name: "flashloan enabled", key: "flashloanEnabled" },
-    { name: "", key: "assetLink" },
+    // { name: "Utilization Rate", key: "utilizationRate", isPercent: true },
+    // {
+    //   name: "Price Oracle Address",
+    //   key: "priceOracleAddress",
+    //   hasURL: true,
+    //   textForURL: "view in explorer",
+    // },
+    // { name: "Oracle Price", key: "oraclePrice" },
+    { name: "", key: "assetLink", hasURL: true, textForURL: "more info" },
   ],
   zerolend: [
     { name: "asset", key: "symbol" },
@@ -72,9 +92,19 @@ export const headers = {
       isPercent: true,
     },
     { name: "emode liq bonus", key: "eModeLiquidationBonus", isPercent: true },
-    { name: "borrowable in iso mode", key: "borrowableInIsoMode" },
+    { name: "borrowable in iso mode", key: "borrowableInIsolation" },
     { name: "flashloan enabled", key: "flashloanEnabled" },
-    { name: "", key: "assetLink" },
+    { name: "Supply Cap Utilized", key: "supplyCapUtilized", isPercent: true },
+    { name: "Borrow Cap Utilized", key: "borrowCapUtilized", isPercent: true },
+    { name: "Utilization Rate", key: "utilizationRate", isPercent: true },
+    {
+      name: "Price Oracle Address",
+      key: "priceOracleAddress",
+      hasURL: true,
+      textForURL: "view in explorer",
+    },
+    { name: "Oracle Price", key: "oraclePrice" },
+    { name: "", key: "assetLink", hasURL: true, textForURL: "more info" },
   ],
   benqi: [
     { name: "asset", key: "symbol" },

@@ -1,9 +1,15 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Contract, ethers } from "ethers";
 import { UiPoolDataProvider } from "@aave/contract-helpers";
-import { formatReserves } from "@aave/math-utils";
+import { formatReserves, normalizeBN } from "@aave/math-utils";
 import dayjs from "dayjs";
-import { compactNumber } from "../../utils/utils";
+import {
+  compactNumber,
+  getBorrowCapData,
+  getSupplyCapData,
+} from "../../utils/utils";
+import abi from "../../abis/abi.json";
+import { formatUnits } from "ethers/lib/utils";
 
 const chainIdToRPCProvider: Record<number, string> = {
   1: "https://eth-mainnet.alchemyapi.io/v2/demo",
@@ -11,6 +17,14 @@ const chainIdToRPCProvider: Record<number, string> = {
   169: "https://pacific-rpc.manta.network/http",
   81457: "https://rpc.ankr.com/blast",
   59144: "https://rpc.linea.build",
+};
+
+const chainIdToExplorerUrl: Record<number, string> = {
+  1: "https://etherscan.io/address/",
+  324: "https://explorer.zksync.io/address/",
+  169: "https://pacific-explorer.manta.network/address/",
+  81457: "https://blastexplorer.io/address/",
+  59144: "https://lineascan.build/address/",
 };
 
 type configInterface = {
@@ -53,12 +67,24 @@ export default async function handler(
       chainId,
     });
 
+    const poolContract = new Contract(config.pool, abi, provider);
     let paused = false;
     if (config.protocol === "v2") {
-      const abi = ["function paused() public view returns (bool)"];
-      const poolContract = new Contract(config.pool, abi, provider);
+      // const abi = ["function paused() public view returns (bool)"];
       paused = await poolContract.paused();
+
+      // console.log()
     }
+
+    // console.log(
+    //   "FLASHLOAN_PREMIUM_TOTAL",
+    //   formatUnits(await poolContract.FLASHLOAN_PREMIUM_TO_PROTOCOL(), 0)
+    // );
+
+    const flashloanPremium = formatUnits(
+      await poolContract.FLASHLOAN_PREMIUM_TO_PROTOCOL(),
+      0
+    );
 
     const reserves = await poolDataProviderContract.getReservesHumanized({
       lendingPoolAddressProvider,
@@ -117,6 +143,20 @@ export default async function handler(
         parseInt(n.eModeLiquidationBonus.toString().slice(-3)) / 100 + "%",
       borrowableInIsolation: n.borrowableInIsolation ? "True" : "False",
       flashloanEnabled: n.flashLoanEnabled ? "True" : "False",
+      supplyCapUtilized: isNaN(getSupplyCapData(n).supplyCapUsage)
+        ? "N/A"
+        : getSupplyCapData(n).supplyCapUsage.toFixed(2) + "%",
+      borrowCapUtilized: isNaN(getBorrowCapData(n).borrowCapUsage)
+        ? "N/A"
+        : getBorrowCapData(n).borrowCapUsage.toFixed(2) + "%",
+      utilizationRate:
+        n.borrowUsageRatio === "0" || !n.borrowUsageRatio
+          ? "N/A"
+          : (parseFloat(n.borrowUsageRatio) * 100).toFixed(2) + "%",
+      priceOracleAddress: chainIdToExplorerUrl[chainId] + n.priceOracle,
+      oraclePrice:
+        compactNumber({ value: n.priceInUSD, visibleDecimals: 2 }).prefix +
+        compactNumber({ value: n.priceInUSD, visibleDecimals: 2 }).postfix,
       assetLink:
         "https://app.zerolend.xyz/reserve-overview/?underlyingAsset=" +
         n.id.slice(n.id.indexOf("-") + 1, n.id.lastIndexOf("-")) +
@@ -124,7 +164,7 @@ export default async function handler(
         config.marketName,
     }));
 
-    res.status(200).json({ data: reservesArray });
+    res.status(200).json({ data: reservesArray, flashloanPremium });
   } catch (e) {
     console.log(e);
     res.status(500).json({ error: "failed to fetch data" });

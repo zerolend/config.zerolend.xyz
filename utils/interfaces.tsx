@@ -1,3 +1,11 @@
+interface TableHeader {
+  name: string;
+  key: string;
+  isPercent?: boolean;
+  hasURL?: boolean;
+  textForURL?: string;
+}
+
 interface Aavev2 {
   symbol: string;
   frozen: string;
@@ -51,4 +59,4 @@ interface Benqi {
 
 export type assetType = Aavev2 | Aavev3 | Benqi;
 
-export type { Aavev2, Aavev3, Benqi };
+export type { Aavev2, Aavev3, Benqi, TableHeader };

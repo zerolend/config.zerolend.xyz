@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import { useState, useEffect } from "react";
-import { CssBaseline, SelectChangeEvent } from "@mui/material";
+import { Box, CssBaseline, SelectChangeEvent, Typography } from "@mui/material";
 import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 import { useMediaQuery } from "@mui/material";
 import Loading from "../components/Loading";
@@ -12,13 +12,16 @@ import Dropdown from "../components/Dropdown";
 import Header from "../components/Header";
 import Datatable from "../components/Datatable";
 import { markets } from "../utils/markets";
-import { assetType } from "../utils/interfaces";
+import { Aavev3, assetType } from "../utils/interfaces";
 
 import zerolendService from "../services/zerolend";
 
 const Home: NextPage = () => {
   const [tableData, setTableData] = useState<assetType[] | undefined>([]);
-  const [market, setMarket] = useState<any>();
+  const [flashLoanPremium, setFlashloanPremium] = useState<
+    number | string | undefined
+  >(undefined);
+  const [market, setMarket] = useState<any>(markets.zerolend);
   const [selectedMarket, setSelectedMarket] = useState<string>("linea");
   const [protocol, setProtocol] = useState<string>("zerolend");
   const [protocolSelected, setProtocolSelected] = useState<boolean>(true);
@@ -28,14 +31,13 @@ const Home: NextPage = () => {
   const [darkMode, setDarkMode] = useState<boolean>(true);
 
   useEffect(() => {
-    setMarket(markets.zerolend);
-    setSelectedMarket("linea");
     const ethereum: any = markets.zerolend.find(
       (n: { name: string }) => n.name === "linea"
     );
 
     zerolendService(ethereum.config, protocol).then((data) => {
-      setTableData(data);
+      setTableData(data?.data);
+      setFlashloanPremium(data?.flashloanPremium);
       setMarketSelected(true);
     });
   }, []);
@@ -76,11 +78,16 @@ const Home: NextPage = () => {
         (n: { name: string }) => n.name === event.target.value
       );
       zerolendService(mkt.config, protocol).then((data) => {
-        setTableData(data);
+        setTableData(data?.data);
+        setFlashloanPremium(data?.flashloanPremium);
         setMarketLoading(false);
       });
     }
   };
+
+  const totalAssets = (tableData as Aavev3[]).filter(
+    (item) => item.frozen !== "True"
+  ).length;
 
   const themes = useTheme();
   const matches = useMediaQuery(themes.breakpoints.down("sm"));
@@ -118,6 +125,21 @@ const Home: NextPage = () => {
           market={market}
           handleMarketChange={handleMarketChange}
         />
+
+        <Box style={{ display: "flex", justifyContent: "center", gap: "1rem" }}>
+          <Box style={{ padding: "1rem 2rem", border: "1px dashed white" }}>
+            <Typography variant="body1" color={"#999"}>
+              Flashloan Premium
+            </Typography>
+            <Typography variant="h6">{flashLoanPremium}</Typography>
+          </Box>
+          <Box style={{ padding: "1rem 2rem", border: "1px dashed white" }}>
+            <Typography variant="body1" color={"#999"}>
+              Total Number of Assets
+            </Typography>
+            <Typography variant="h6">{totalAssets}</Typography>
+          </Box>
+        </Box>
 
         {!matches && (
           <DownloadCsv

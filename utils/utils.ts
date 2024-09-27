@@ -1,4 +1,9 @@
-import { normalizeBN, valueToBigNumber } from "@aave/math-utils";
+import { ReserveDataHumanized } from "@aave/contract-helpers";
+import {
+  FormatReserveUSDResponse,
+  normalizeBN,
+  valueToBigNumber,
+} from "@aave/math-utils";
 
 const POSTFIXES = ["", "K", "M", "B", "T", "P", "E", "Z", "Y"];
 
@@ -68,4 +73,29 @@ export const expandNumber = (value: string): string => {
     : numericValue;
 
   return expandedValue.toString();
+};
+
+export const getSupplyCapData = (
+  asset: ReserveDataHumanized & FormatReserveUSDResponse
+) => {
+  let supplyCapUsage: number = asset
+    ? valueToBigNumber(asset.totalLiquidity)
+        .dividedBy(asset.supplyCap)
+        .toNumber() * 100
+    : 0;
+  supplyCapUsage = supplyCapUsage === Infinity ? 0 : supplyCapUsage;
+  const supplyCapReached = supplyCapUsage >= 99.99;
+  return { supplyCapUsage, supplyCapReached };
+};
+
+export const getBorrowCapData = (
+  asset: ReserveDataHumanized & FormatReserveUSDResponse
+) => {
+  let borrowCapUsage: number = asset
+    ? valueToBigNumber(asset.totalDebt).dividedBy(asset.borrowCap).toNumber() *
+      100
+    : 0;
+  borrowCapUsage = borrowCapUsage === Infinity ? 0 : borrowCapUsage;
+  const borrowCapReached = borrowCapUsage >= 99.99;
+  return { borrowCapUsage, borrowCapReached };
 };
