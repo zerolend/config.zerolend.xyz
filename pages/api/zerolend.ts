@@ -9,6 +9,7 @@ const chainIdToRPCProvider: Record<number, string> = {
   324: "https://mainnet.era.zksync.io",
   169: "https://pacific-rpc.manta.network/http",
   81457: "https://rpc.ankr.com/blast",
+  8453: "https://mainnet.base.org",
   59144: "https://rpc.linea.build",
 };
 

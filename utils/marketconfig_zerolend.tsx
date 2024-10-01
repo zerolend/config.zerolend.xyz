@@ -65,5 +65,12 @@ export const marketConfigZerolend = {
     POOL: '0x2f9bB73a8e98793e26Cb2F6C4ad037BDf1C6B269',
     marketName: "proto_linea_v3",
   },
-
+  base: {
+    chainId: 8453,
+    publicJsonRPCUrl: "https://mainnet.base.org",
+    LENDING_POOL_ADDRESS_PROVIDER: '0x5213ab3997a596c75Ac6ebF81f8aEb9cf9A31007',
+    UI_POOL_DATA_PROVIDER: '0x0A1198DDb5247a283F76077Bb1E45e5858ee100b',
+    POOL: '0x766f21277087E18967c1b10bF602d8Fe56d0c671',
+    marketName: "proto_base_v3",
+  },
 };
