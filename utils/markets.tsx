@@ -80,6 +80,10 @@ export const markets = {
       config: marketConfigZerolend.ethereum_btc_lrt,
     },
     {
+      name: "base",
+      config: marketConfigZerolend.base,
+    },
+    {
       name: "zksync",
       config: marketConfigZerolend.zksync,
     },
