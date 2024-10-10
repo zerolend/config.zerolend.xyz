@@ -1,175 +1,94 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TableSortLabel,
-} from "@mui/material";
-import { useState } from "react";
-import { headers } from "../utils/headers";
-import { assetType, TableHeader } from "../utils/interfaces";
-import { expandNumber } from "../utils/utils";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-quartz.css";
+import { AgGridReact } from "ag-grid-react";
+import { ColDef } from "ag-grid-community";
+import BooleanRenderer from "./cells/BooleanRenderer";
+import LinkRenderer from "./cells/LinkRenderer";
+import NumberRenderer from "./cells/NumberRenderer";
+import React, { useRef, } from "react";
+import { Aavev3 } from "../utils/interfaces";
+import NumberRendererWithUSD from "./cells/NumberRendererWithUSD";
 
-const ColourText = (props: { text: string }) => {
-  const color =
-    props.text == "True"
-      ? "#A1DD70"
-      : props.text == "False"
-        ? "#f44"
-        : props.text == "N/A"
-          ? "#999"
-          : props.text == "0%"
-            ? "#999"
-            : "inherit";
+interface IProps {
+    data: Aavev3[];
+}
 
-  return (
-    <TableCell sx={{ color }} align="center">
-      {props.text}
-    </TableCell>
-  );
-};
+const Datatable = (props: IProps) => {
+    const gridRef = useRef<AgGridReact<any>>(null);
 
-const Datatable = (props: {
-  protocol: string;
-  matches: boolean;
-  riskParams: assetType[] | undefined;
-}) => {
-  type ObjectKey = keyof typeof headers;
+    const columnDefs: ColDef[] = [
+        {
+            field: "symbol",
+            maxWidth: 150,
+            pinned: "left",
+            cellStyle: { fontWeight: 'bold' },
+        },
+        { field: "frozen", width: 100, cellRenderer: BooleanRenderer },
+        { field: "paused", width: 100, cellRenderer: BooleanRenderer },
+        { field: "canCollateral", headerName: 'Collateral', width: 100, cellRenderer: BooleanRenderer },
+        { field: "canBorrow", headerName: 'Borrowable', width: 120, cellRenderer: BooleanRenderer },
+        { field: "isIsolated", headerName: 'Isolated', width: 100, cellRenderer: BooleanRenderer },
+        { field: "flashloanEnabled", headerName: 'Flasloans', width: 100, cellRenderer: BooleanRenderer },
 
-  const [order, setOrder] = useState<"asc" | "desc">("asc");
-  const [orderBy, setOrderBy] = useState<{
-    key: string;
-    isPercent?: boolean;
-  }>({
-    key: "",
-  });
+        { valueGetter: () => 'TODO', headerName: 'Supplied', width: 125, cellRenderer: NumberRendererWithUSD },
+        { valueGetter: () => 'TODO', headerName: 'Borrowed', width: 125, cellRenderer: NumberRendererWithUSD },
 
-  const handleRequestSort = (property: {
-    key: string;
-    isPercent?: boolean;
-  }) => {
-    const isAsc = orderBy.key === property.key && order === "asc";
-    setOrder(isAsc ? "desc" : "asc");
-    setOrderBy(property);
-  };
+        {
+            field: "LTV", headerName: "LTV %", width: 75, cellRenderer: NumberRenderer,
+            headerTooltip: "Loan-to-value",
+
+        },
+        {
+            field: "liqThereshold", headerName: 'LT %', width: 75, cellRenderer: NumberRenderer,
+            headerTooltip: "Liquidation Thereshold",
+        },
+        {
+            field: "liqBonus", headerName: 'LB %', width: 75, cellRenderer: NumberRenderer,
+            headerTooltip: "Liquidation Bonus"
+        },
+        { field: "reserveFactor", headerName: 'RF %', width: 75, cellRenderer: NumberRenderer, headerTooltip: "Reserve Factor" },
+        { valueGetter: () => 'TODO', headerName: 'Liq Fee %', width: 100, cellRenderer: NumberRenderer, headerTooltip: "Liquidation Protocol Fee" },
+
+        { field: "utilizationRate", headerName: 'U%', width: 100, cellRenderer: NumberRenderer, headerTooltip: "Utilization Percentage" },
+        { field: "optimalUtilization", headerName: 'OU %', width: 75, cellRenderer: NumberRenderer, headerTooltip: "Optimal Utilization" },
+        { field: "varBorrowRate", headerName: 'VarB %', width: 100, cellRenderer: NumberRenderer, headerTooltip: "Variable Borrow Rate" },
+
+        { field: "debtCeiling", headerName: 'Debt Ceiling', width: 125, cellRenderer: NumberRenderer },
+        { field: "supplyCap", headerName: 'Supply Cap', width: 125, cellRenderer: NumberRendererWithUSD },
+        { field: "borrowCap", headerName: 'Borrow Cap', width: 125, cellRenderer: NumberRendererWithUSD },
+
+        { field: "supplyCapUtilized", headerName: 'Supply Cap %', width: 150, cellRenderer: NumberRendererWithUSD },
+        { field: "borrowCapUtilized", headerName: 'Borrow Cap %', width: 150, cellRenderer: NumberRendererWithUSD },
+        { valueGetter: () => 'TODO', headerName: 'Debt Ceiling %', width: 150, cellRenderer: NumberRendererWithUSD },
 
 
-  const sortedData = props.riskParams
-    ? [...props.riskParams].sort((a, b) => {
-      if (orderBy) {
-        const aValue = a[orderBy.key as keyof assetType];
-        const bValue = b[orderBy.key as keyof assetType];
-        if (aValue && bValue) {
-          const aNum = parseFloat(aValue);
-          const bNum = parseFloat(bValue);
+        { field: "eModeLtv", headerName: 'eMode LTV', width: 125, cellRenderer: NumberRenderer },
+        { field: "eModeLiquidationThereshold", headerName: 'eMode LT', width: 100, cellRenderer: NumberRenderer },
+        { field: "eModeLiquidationBonus", headerName: 'eMode LB', width: 100, cellRenderer: NumberRenderer },
+        { field: "oraclePrice", headerName: 'Price', width: 100, cellRenderer: NumberRenderer },
+        { field: "priceOracleAddress", headerName: 'Oracle', width: 125, cellRenderer: LinkRenderer },
+        { field: "assetLink", headerName: 'dApp Link', width: 125, cellRenderer: LinkRenderer },
+        { valueGetter: () => 'TODO', headerName: 'Holders', width: 125, },
+        { valueGetter: () => 'TODO', headerName: 'z0 Holders', width: 125, },
+        { valueGetter: () => 'TODO', headerName: 'z0varDebt Holders', width: 175, },
+    ];
 
-          if (isNaN(aNum) && isNaN(bNum)) {
-            if (
-              ["True", "False"].includes(aValue) &&
-              ["True", "False"].includes(bValue)
-            ) {
-              const boolMap = {
-                True: 1,
-                False: 0,
-              };
-
-              return order === "asc"
-                ? boolMap[aValue as keyof typeof boolMap] -
-                boolMap[bValue as keyof typeof boolMap]
-                : boolMap[bValue as keyof typeof boolMap] -
-                boolMap[aValue as keyof typeof boolMap];
+    return (
+        <div
+            style={{ height: "800px", width: "100%" }}
+            className={
+                "ag-theme-quartz"
             }
-
-            return order === "asc" ? -1 : 1;
-          }
-
-          if (orderBy.isPercent) {
-            return order === "asc" ? aNum - bNum : bNum - aNum;
-          }
-
-          return order === "asc"
-            ? parseFloat(expandNumber(aValue)) -
-            parseFloat(expandNumber(bValue))
-            : parseFloat(expandNumber(bValue)) -
-            parseFloat(expandNumber(aValue));
-        }
-      }
-      return 0;
-    })
-    : [];
-
-  return (
-    <TableContainer
-      sx={{
-        width: props.matches ? "100%" : props.protocol === "v3" ? "90%" : "80%",
-        margin: "auto",
-        border: "1px dashed grey",
-        size: "small",
-        mt: 1,
-      }}
-    >
-      <Table size="small" aria-label="a dense table ">
-        <TableHead>
-          <TableRow>
-            {headers[props.protocol as ObjectKey].map(
-              (n: TableHeader, index: number) => (
-                <TableCell
-                  align="center"
-                  key={index}
-                  sortDirection={orderBy.key === n.key ? order : false}
-                >
-                  {n.key !== "symbol" && !n.hasURL ? (
-                    <TableSortLabel
-                      active={orderBy.key === n.key}
-                      direction={orderBy.key === n.key ? order : "asc"}
-                      onClick={() =>
-                        handleRequestSort({
-                          key: n.key,
-                          isPercent: n.isPercent,
-                        })
-                      }
-                    >
-                      <b>{n.name}</b>
-                    </TableSortLabel>
-                  ) : (
-                    <b>{n.name}</b>
-                  )}
-                </TableCell>
-              )
-            )}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {sortedData.map((n, i) => (
-            <TableRow
-              key={props.riskParams?.indexOf(n)}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              {Object.entries(n)
-                .filter(([key, _]) => key !== "type")
-                .map(([_, value], i) => {
-                  const hasURL = headers[props.protocol][i].hasURL;
-
-                  if (hasURL) {
-                    return (
-                      <TableCell align="center">
-                        <a href={value} target="_blank" rel="noreferrer">
-                          <u>{headers[props.protocol][i].textForURL}</u>
-                        </a>
-                      </TableCell>
-                    );
-                  } else {
-                    return <ColourText text={value} key={i} />;
-                  }
-                })}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
+        >
+            <AgGridReact<any>
+                ref={gridRef}
+                tooltipShowMode='standard'
+                tooltipShowDelay={500}
+                rowData={props.data}
+                columnDefs={columnDefs}
+            />
+        </div>
+    );
 };
 
-export default Datatable;
+export default Datatable

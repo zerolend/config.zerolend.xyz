@@ -5,7 +5,7 @@ import { markets } from "../utils/markets";
 import { useState, useEffect } from "react";
 import Dropdown from "../components/Dropdown";
 import Head from "next/head";
-import StickyHeadTable from "../components/Tablev2";
+import Datatable from "../components/Datatable";
 import styles from "../styles/Home.module.css";
 import type { NextPage } from "next";
 import zerolendService from "../services/zerolend";
@@ -71,7 +71,7 @@ const Home: NextPage = () => {
         />
 
       </ThemeProvider>
-      <StickyHeadTable data={tableData} />
+      <Datatable data={tableData} />
     </div>
   );
 };
