@@ -34,24 +34,24 @@ const GridExample = (props: IProps) => {
         { valueGetter: () => 'TODO', headerName: 'Borrowed', width: 125, cellRenderer: NumberRendererWithUSD },
 
         {
-            field: "LTV", width: 75, cellRenderer: NumberRenderer,
+            field: "LTV", headerName: "LTV %", width: 75, cellRenderer: NumberRenderer,
             headerTooltip: "Loan-to-value",
 
         },
         {
-            field: "liqThereshold", headerName: 'LT', width: 75, cellRenderer: NumberRenderer,
+            field: "liqThereshold", headerName: 'LT %', width: 75, cellRenderer: NumberRenderer,
             headerTooltip: "Liquidation Thereshold",
         },
         {
-            field: "liqBonus", headerName: 'LB', width: 75, cellRenderer: NumberRenderer,
+            field: "liqBonus", headerName: 'LB %', width: 75, cellRenderer: NumberRenderer,
             headerTooltip: "Liquidation Bonus"
         },
-        { field: "reserveFactor", headerName: 'RF', width: 75, cellRenderer: NumberRenderer, headerTooltip: "Reserve Factor" },
-        { valueGetter: () => 'TODO', headerName: 'Liq Fee', width: 150, cellRenderer: NumberRendererWithUSD, headerTooltip: "Liquidation Protocol Fee" },
+        { field: "reserveFactor", headerName: 'RF %', width: 75, cellRenderer: NumberRenderer, headerTooltip: "Reserve Factor" },
+        { valueGetter: () => 'TODO', headerName: 'Liq Fee %', width: 100, cellRenderer: NumberRenderer, headerTooltip: "Liquidation Protocol Fee" },
 
         { field: "utilizationRate", headerName: 'U%', width: 100, cellRenderer: NumberRenderer, headerTooltip: "Utilization Percentage" },
-        { field: "optimalUtilization", headerName: 'OU', width: 75, cellRenderer: NumberRenderer, headerTooltip: "Optimal Utilization" },
-        { field: "varBorrowRate", headerName: 'VarB', width: 75, cellRenderer: NumberRenderer, headerTooltip: "Variable Borrow Rate" },
+        { field: "optimalUtilization", headerName: 'OU %', width: 75, cellRenderer: NumberRenderer, headerTooltip: "Optimal Utilization" },
+        { field: "varBorrowRate", headerName: 'VarB %', width: 100, cellRenderer: NumberRenderer, headerTooltip: "Variable Borrow Rate" },
 
         { field: "debtCeiling", headerName: 'Debt Ceiling', width: 125, cellRenderer: NumberRenderer },
         { field: "supplyCap", headerName: 'Supply Cap', width: 125, cellRenderer: NumberRendererWithUSD },
