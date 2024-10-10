@@ -36,7 +36,7 @@ const Datatable = (props: IProps) => {
     const columnDefs: ColDef[] = [
         {
             field: "symbol",
-            maxWidth: 150,
+            maxWidth: 200,
             pinned: "left",
             cellStyle: { fontWeight: 'bold' },
         },
@@ -72,10 +72,8 @@ const Datatable = (props: IProps) => {
         },
         { field: "reserveFactor", headerName: 'RF %', width: 75, cellRenderer: NumberRenderer, headerTooltip: "Reserve Factor" },
         { valueGetter: () => 'TODO', headerName: 'Liq Fee %', width: 100, cellRenderer: NumberRenderer, headerTooltip: "Liquidation Protocol Fee" },
-
         { field: "optimalUtilization", headerName: 'OU %', width: 75, cellRenderer: NumberRenderer, headerTooltip: "Optimal Utilization" },
         { field: "varBorrowRate", headerName: 'VarB %', width: 100, cellRenderer: NumberRenderer, headerTooltip: "Variable Borrow Rate" },
-
         {
             valueGetter: (a) => `${prettyNumber(a.data.debtCeiling, 'number-short')} USD`,
             headerName: 'Debt Ceiling', width: 125, cellRenderer: NumberRenderer
@@ -88,7 +86,6 @@ const Datatable = (props: IProps) => {
             valueGetter: (a) => `${prettyNumber(a.data.borrowCap, 'number-short')} ${a.data.symbol}`,
             field: "borrowCap", headerName: 'Borrow Cap', width: 125, cellRenderer: NumberRendererWithUSD
         },
-
         { field: "supplyCapUtilized", headerName: 'Supply Cap %', width: 150, cellRenderer: NumberRendererWithUSD },
         { field: "borrowCapUtilized", headerName: 'Borrow Cap %', width: 150, cellRenderer: NumberRendererWithUSD },
         {
