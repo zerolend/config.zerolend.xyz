@@ -47,6 +47,7 @@ const GridExample = (props: IProps) => {
             headerTooltip: "Liquidation Bonus"
         },
         { field: "reserveFactor", headerName: 'RF', width: 75, cellRenderer: NumberRenderer, headerTooltip: "Reserve Factor" },
+        { valueGetter: () => 'TODO', headerName: 'Liq Fee', width: 150, cellRenderer: NumberRendererWithUSD, headerTooltip: "Liquidation Protocol Fee" },
 
         { field: "utilizationRate", headerName: 'U%', width: 100, cellRenderer: NumberRenderer, headerTooltip: "Utilization Percentage" },
         { field: "optimalUtilization", headerName: 'OU', width: 75, cellRenderer: NumberRenderer, headerTooltip: "Optimal Utilization" },
