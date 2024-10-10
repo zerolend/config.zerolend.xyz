@@ -104,6 +104,7 @@ const Datatable = (props: IProps) => {
             valueGetter: (a) => extractContract(a.data, 'priceOracleAddress'),
             headerName: 'Oracle', width: 175, cellRenderer: LinkRenderer
         },
+        { valueGetter: (a) => extractHolders(a.data, 'interestRateAddress'), headerName: 'Strategy', width: 175, cellRenderer: LinkRenderer },
         { valueGetter: (a) => extractHolders(a.data, 'underlying'), headerName: 'Holders', width: 175, cellRenderer: LinkRenderer },
         { valueGetter: (a) => extractHolders(a.data, 'aToken'), headerName: 'z0 Holders', width: 175, cellRenderer: LinkRenderer },
         { valueGetter: (a) => extractHolders(a.data, 'varAToken'), headerName: 'z0varDebt Holders', width: 175, cellRenderer: LinkRenderer },
