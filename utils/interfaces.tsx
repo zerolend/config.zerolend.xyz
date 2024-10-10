@@ -39,13 +39,25 @@ interface Aavev3 {
   canBorrowStable: string;
   stableBorrowRate: string;
   shareOfStableRate: string;
+  isolationModeTotalDebtUSD: number,
+  availableDebtCeilingUSD: number,
+  totalDebt: number,
+  totalLiquidity: number,
   debtCeiling: string;
-  supplyCap: string;
-  borrowCap: string;
+  supplyCap: number;
+  borrowCap: number;
   eModeLtv: string;
   eModeLiquidationThereshold: string;
   eModeLiquidationBonus: string;
   assetLink: string;
+
+  priceOracleAddress: string
+  oraclePrice: string
+  explorer: string
+  aToken: string
+  varAToken: string
+  underlying: string
+  interestRateAddress: string
 }
 
 interface Benqi {

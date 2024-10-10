@@ -14,6 +14,7 @@
     "@aave/math-utils": "^1.21.0",
     "@ag-grid-community/client-side-row-model": "^32.2.2",
     "@ag-grid-community/react": "^32.2.2",
+    "@based/pretty-number": "^1.1.2",
     "@bgd-labs/aave-address-book": "^2.20.0",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
