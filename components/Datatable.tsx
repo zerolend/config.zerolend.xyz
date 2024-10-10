@@ -22,12 +22,14 @@ const Datatable = (props: IProps) => {
         return {
             link: `${data.explorer}/token/${data[key]}#balances`,
             title: formatEVMAddress(data[key]),
+            copy: data[key]
         }
     }
     const extractContract = (data: any, key: string) => {
         return {
             link: `${data.explorer}/address/${data[key]}#readContract`,
             title: formatEVMAddress(data[key]),
+            copy: data[key]
         }
     }
 
@@ -103,10 +105,10 @@ const Datatable = (props: IProps) => {
         },
         {
             valueGetter: (a) => extractContract(a.data, 'priceOracleAddress'),
-            headerName: 'Oracle', width: 150, cellRenderer: LinkRenderer
+            headerName: 'Oracle', width: 175, cellRenderer: LinkRenderer
         },
-        { valueGetter: (a) => extractHolders(a.data, 'underlying'), headerName: 'Holders', width: 150, cellRenderer: LinkRenderer },
-        { valueGetter: (a) => extractHolders(a.data, 'aToken'), headerName: 'z0 Holders', width: 150, cellRenderer: LinkRenderer },
+        { valueGetter: (a) => extractHolders(a.data, 'underlying'), headerName: 'Holders', width: 175, cellRenderer: LinkRenderer },
+        { valueGetter: (a) => extractHolders(a.data, 'aToken'), headerName: 'z0 Holders', width: 175, cellRenderer: LinkRenderer },
         { valueGetter: (a) => extractHolders(a.data, 'varAToken'), headerName: 'z0varDebt Holders', width: 175, cellRenderer: LinkRenderer },
         {
             valueGetter: (a) => ({ title: 'app.zerolend.xyz', link: a.data.assetLink }),
@@ -121,7 +123,7 @@ const Datatable = (props: IProps) => {
                 "ag-theme-quartz"
             }
         >
-            <AgGridReact<any>
+            <AgGridReact
                 ref={gridRef}
                 tooltipShowMode='standard'
                 tooltipShowDelay={500}
