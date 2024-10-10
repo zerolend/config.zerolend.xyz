@@ -25,6 +25,7 @@ const chainIdToExplorerUrl: Record<number, string> = {
   324: "https://explorer.zksync.io/address/",
   169: "https://pacific-explorer.manta.network/address/",
   81457: "https://blastexplorer.io/address/",
+  8453: "https://basescan.org/address/",
   59144: "https://lineascan.build/address/",
 };
 
