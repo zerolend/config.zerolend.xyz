@@ -1,0 +1,17 @@
+import { CustomCellRendererProps } from 'ag-grid-react';
+import React from 'react';
+import Image from 'next/image'
+
+const BooleanRenderer = (params: CustomCellRendererProps) => (
+    // {consol.log(params.value)}
+    <span className="missionSpan">
+        <img
+            alt='icon'
+            src={`https://www.ag-grid.com/example-assets/icons/${params.value == 'True' ? 'tick-in-circle' : 'cross-in-circle'
+                }.png`}
+            className="missionIcon"
+        />
+    </span>
+);
+
+export default BooleanRenderer

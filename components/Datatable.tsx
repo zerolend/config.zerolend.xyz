@@ -17,12 +17,12 @@ const ColourText = (props: { text: string }) => {
     props.text == "True"
       ? "#A1DD70"
       : props.text == "False"
-      ? "#f44"
-      : props.text == "N/A"
-      ? "#999"
-      : props.text == "0%"
-      ? "#999"
-      : "inherit";
+        ? "#f44"
+        : props.text == "N/A"
+          ? "#999"
+          : props.text == "0%"
+            ? "#999"
+            : "inherit";
 
   return (
     <TableCell sx={{ color }} align="center">
@@ -55,48 +55,49 @@ const Datatable = (props: {
     setOrderBy(property);
   };
 
+
   const sortedData = props.riskParams
     ? [...props.riskParams].sort((a, b) => {
-        if (orderBy) {
-          const aValue = a[orderBy.key as keyof assetType];
-          const bValue = b[orderBy.key as keyof assetType];
-          if (aValue && bValue) {
-            const aNum = parseFloat(aValue);
-            const bNum = parseFloat(bValue);
+      if (orderBy) {
+        const aValue = a[orderBy.key as keyof assetType];
+        const bValue = b[orderBy.key as keyof assetType];
+        if (aValue && bValue) {
+          const aNum = parseFloat(aValue);
+          const bNum = parseFloat(bValue);
 
-            if (isNaN(aNum) && isNaN(bNum)) {
-              if (
-                ["True", "False"].includes(aValue) &&
-                ["True", "False"].includes(bValue)
-              ) {
-                const boolMap = {
-                  True: 1,
-                  False: 0,
-                };
+          if (isNaN(aNum) && isNaN(bNum)) {
+            if (
+              ["True", "False"].includes(aValue) &&
+              ["True", "False"].includes(bValue)
+            ) {
+              const boolMap = {
+                True: 1,
+                False: 0,
+              };
 
-                return order === "asc"
-                  ? boolMap[aValue as keyof typeof boolMap] -
-                      boolMap[bValue as keyof typeof boolMap]
-                  : boolMap[bValue as keyof typeof boolMap] -
-                      boolMap[aValue as keyof typeof boolMap];
-              }
-
-              return order === "asc" ? -1 : 1;
+              return order === "asc"
+                ? boolMap[aValue as keyof typeof boolMap] -
+                boolMap[bValue as keyof typeof boolMap]
+                : boolMap[bValue as keyof typeof boolMap] -
+                boolMap[aValue as keyof typeof boolMap];
             }
 
-            if (orderBy.isPercent) {
-              return order === "asc" ? aNum - bNum : bNum - aNum;
-            }
-
-            return order === "asc"
-              ? parseFloat(expandNumber(aValue)) -
-                  parseFloat(expandNumber(bValue))
-              : parseFloat(expandNumber(bValue)) -
-                  parseFloat(expandNumber(aValue));
+            return order === "asc" ? -1 : 1;
           }
+
+          if (orderBy.isPercent) {
+            return order === "asc" ? aNum - bNum : bNum - aNum;
+          }
+
+          return order === "asc"
+            ? parseFloat(expandNumber(aValue)) -
+            parseFloat(expandNumber(bValue))
+            : parseFloat(expandNumber(bValue)) -
+            parseFloat(expandNumber(aValue));
         }
-        return 0;
-      })
+      }
+      return 0;
+    })
     : [];
 
   return (
