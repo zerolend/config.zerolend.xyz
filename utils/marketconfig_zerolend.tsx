@@ -17,6 +17,14 @@ export const marketConfigZerolend = {
     POOL: '0xCD2b31071119D7eA449a9D211AC8eBF7Ee97F987',
     marketName: "proto_mainnet_btc_v3",
   },
+  ethereum_rwa: {
+    chainId: ChainId.mainnet,
+    publicJsonRPCUrl: "https://eth-mainnet.alchemyapi.io/v2/demo",
+    LENDING_POOL_ADDRESS_PROVIDER: '0xe3c3c5ead58fc2bed4e577e38985b8f7f1ddff00',
+    UI_POOL_DATA_PROVIDER: '0xa6EA08D16d47feE408505fda73520EbefC68Ef01',
+    POOL: '0xD3a4DA66EC15a001466F324FA08037f3272BDbE8',
+    marketName: "proto_mainnet_rwa_v3",
+  },
   zksync: {
     chainId: 324,
     publicJsonRPCUrl: "https://mainnet.era.zksync.io",

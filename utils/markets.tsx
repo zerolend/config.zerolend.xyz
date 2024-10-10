@@ -2,74 +2,6 @@ import { marketConfig } from "../utils/marketconfig";
 import { marketConfigZerolend } from "./marketconfig_zerolend";
 
 export const markets = {
-  v2: [
-    {
-      name: "ethereum",
-      config: marketConfig.ethereum,
-    },
-    {
-      name: "eth amm",
-      config: marketConfig.ethamm,
-    },
-    {
-      name: "avalanche",
-      config: marketConfig.avalanche,
-    },
-    {
-      name: "polygon",
-      config: marketConfig.polygon,
-    },
-  ],
-  v3: [
-    {
-      name: "ethereum",
-      config: marketConfig.ethereumv3,
-    },
-    {
-      name: "arbitrum",
-      config: marketConfig.arbitrum,
-    },
-    {
-      name: "avalanche",
-      config: marketConfig.avalanchev3,
-    },
-    {
-      name: "fantom",
-      config: marketConfig.fantom,
-    },
-    {
-      name: "harmony",
-      config: marketConfig.harmony,
-    },
-    {
-      name: "optimism",
-      config: marketConfig.optimism,
-    },
-    {
-      name: "polygon",
-      config: marketConfig.polygonv3,
-    },
-    {
-      name: "metis",
-      config: marketConfig.metis,
-    },
-    {
-      name: "base",
-      config: marketConfig.base,
-    },
-    {
-      name: "gnosis",
-      config: marketConfig.gnosis,
-    },
-    {
-      name: "bnb",
-      config: marketConfig.bnb,
-    },
-    {
-      name: "scroll",
-      config: marketConfig.scroll,
-    },
-  ],
   zerolend: [
     {
       name: "ethereum eth lrt",
@@ -78,6 +10,10 @@ export const markets = {
     {
       name: "ethereum btc lrt",
       config: marketConfigZerolend.ethereum_btc_lrt,
+    },
+    {
+      name: "ethereum rwa",
+      config: marketConfigZerolend.ethereum_rwa,
     },
     {
       name: "base",
