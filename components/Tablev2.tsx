@@ -7,6 +7,7 @@ import LinkRenderer from "./cells/LinkRenderer";
 import NumberRenderer from "./cells/NumberRenderer";
 import React, { useRef, } from "react";
 import { Aavev3 } from "../utils/interfaces";
+import NumberRendererWithUSD from "./cells/NumberRendererWithUSD";
 
 interface IProps {
     data: Aavev3[];
@@ -28,6 +29,10 @@ const GridExample = (props: IProps) => {
         { field: "canBorrow", headerName: 'Borrowable', width: 120, cellRenderer: BooleanRenderer },
         { field: "isIsolated", headerName: 'Isolated', width: 100, cellRenderer: BooleanRenderer },
         { field: "flashloanEnabled", headerName: 'Flasloans', width: 100, cellRenderer: BooleanRenderer },
+
+        { valueGetter: () => 'TODO', headerName: 'Supplied', width: 125, cellRenderer: NumberRendererWithUSD },
+        { valueGetter: () => 'TODO', headerName: 'Borrowed', width: 125, cellRenderer: NumberRendererWithUSD },
+
         {
             field: "LTV", width: 75, cellRenderer: NumberRenderer,
             headerTooltip: "Loan-to-value",
@@ -43,22 +48,28 @@ const GridExample = (props: IProps) => {
         },
         { field: "reserveFactor", headerName: 'RF', width: 75, cellRenderer: NumberRenderer, headerTooltip: "Reserve Factor" },
 
-        { field: "debtCeiling", headerName: 'Debt Ceiling', width: 125, cellRenderer: NumberRenderer },
-        { field: "supplyCap", headerName: 'Supply Cap', width: 125, cellRenderer: NumberRenderer },
-        { field: "borrowCap", headerName: 'Borrow Cap', width: 125, cellRenderer: NumberRenderer },
-
-        { field: "supplyCapUtilized", headerName: 'Supply Cap %', width: 150, cellRenderer: NumberRenderer },
-        { field: "borrowCapUtilized", headerName: 'Borrow Cap %', width: 150, cellRenderer: NumberRenderer },
         { field: "utilizationRate", headerName: 'U%', width: 100, cellRenderer: NumberRenderer, headerTooltip: "Utilization Percentage" },
         { field: "optimalUtilization", headerName: 'OU', width: 75, cellRenderer: NumberRenderer, headerTooltip: "Optimal Utilization" },
         { field: "varBorrowRate", headerName: 'VarB', width: 75, cellRenderer: NumberRenderer, headerTooltip: "Variable Borrow Rate" },
+
+        { field: "debtCeiling", headerName: 'Debt Ceiling', width: 125, cellRenderer: NumberRenderer },
+        { field: "supplyCap", headerName: 'Supply Cap', width: 125, cellRenderer: NumberRendererWithUSD },
+        { field: "borrowCap", headerName: 'Borrow Cap', width: 125, cellRenderer: NumberRendererWithUSD },
+
+        { field: "supplyCapUtilized", headerName: 'Supply Cap %', width: 150, cellRenderer: NumberRendererWithUSD },
+        { field: "borrowCapUtilized", headerName: 'Borrow Cap %', width: 150, cellRenderer: NumberRendererWithUSD },
+        { valueGetter: () => 'TODO', headerName: 'Debt Ceiling %', width: 150, cellRenderer: NumberRendererWithUSD },
+
 
         { field: "eModeLtv", headerName: 'eMode LTV', width: 125, cellRenderer: NumberRenderer },
         { field: "eModeLiquidationThereshold", headerName: 'eMode LT', width: 100, cellRenderer: NumberRenderer },
         { field: "eModeLiquidationBonus", headerName: 'eMode LB', width: 100, cellRenderer: NumberRenderer },
         { field: "oraclePrice", headerName: 'Price', width: 100, cellRenderer: NumberRenderer },
         { field: "priceOracleAddress", headerName: 'Oracle', width: 125, cellRenderer: LinkRenderer },
-        { field: "assetLink", headerName: 'Link', width: 125, cellRenderer: LinkRenderer },
+        { field: "assetLink", headerName: 'dApp Link', width: 125, cellRenderer: LinkRenderer },
+        { valueGetter: () => 'TODO', headerName: 'Holders', width: 125, },
+        { valueGetter: () => 'TODO', headerName: 'z0 Holders', width: 125, },
+        { valueGetter: () => 'TODO', headerName: 'z0varDebt Holders', width: 175, },
     ];
 
     return (
