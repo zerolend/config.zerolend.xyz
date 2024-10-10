@@ -130,7 +130,7 @@ export default async function handler(
       availableDebtCeilingUSD: parseFloat(n.availableDebtCeilingUSD),
       supplyCap: parseFloat(n.supplyCap),
       borrowCap: parseFloat(n.borrowCap),
-      eModeLtv: n.eModeLtv / 100 + "%",
+      eModeLtv: n.eModeLtv / 100 + " %",
       eModeLiquidationThereshold: n.eModeLiquidationThreshold / 100 + " %",
       totalDebt: parseFloat(n.totalDebt),
       totalLiquidity: parseFloat(n.totalLiquidity),

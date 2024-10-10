@@ -5,7 +5,7 @@ const NumberRendererWithUSD = (params: CustomCellRendererProps) => {
     const [val, symbol] = params.value.split(' ');
     return (
         <span className="missionSpan" style={{
-            opacity: params.value === '0' || params.value === '0%' || params.value === '0.00%' || params.value === 'N/A' || /^0 (.+)/.test(params.value) ? 0.3 : 1,
+            opacity: params.value === '0' || params.value === '0 %' || params.value === '0.00 %' || params.value === 'N/A' || /^0 (.+)/.test(params.value) ? 0.3 : 1,
             lineHeight: 1,
             textAlign: 'center',
         }}>
