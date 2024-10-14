@@ -10,13 +10,14 @@ import { Aavev3 } from "../utils/interfaces";
 import { prettyNumber } from '@based/pretty-number'
 import NumberRendererWithUSD from "./cells/NumberRendererWithUSD";
 import "../styles/Home.module.css"
+import StringRenderer from "./cells/StringRenderer";
 
 interface IProps {
     data: Aavev3[];
 }
 
 const Datatable = (props: IProps) => {
-    console.log("props.data",props.data)
+   
     const gridRef = useRef<AgGridReact<any>>(null);
 
     const formatEVMAddress = (address: string) => `${address.slice(0, 6)}...${address.slice(-4)}`;
@@ -34,7 +35,7 @@ const Datatable = (props: IProps) => {
             copy: data[key]
         }
     }
-    const parseLiquidationPremium = (premiumString:string) => {
+    const parseLiquidationPremium = (premiumString: string) => {
         if (!premiumString) return 0; // Default to 0 if no value exists
         const parsedValue = parseFloat(premiumString.replace('%', '').trim());
         return isNaN(parsedValue) ? 0 : parsedValue;
@@ -64,21 +65,44 @@ const Datatable = (props: IProps) => {
         { field: "canBorrow", headerName: 'Borrowable', width: 120, cellRenderer: BooleanRenderer },
         { field: "isIsolated", headerName: 'Isolated', width: 100, cellRenderer: BooleanRenderer },
         { field: "flashloanEnabled", headerName: 'Flasloans', width: 100, cellRenderer: BooleanRenderer },
+        {
+            valueGetter: (params) => {
+                const tokenAmount = prettyNumber(params.data.totalLiquidity, 'number-short');
+                const symbol = params.data.symbol;
+                const equivalentInUSD = `${prettyNumber((params.data.totalLiquidity * params.data.oraclePrice), 'number-short')}`;  // Assuming you have the price
+                return `${tokenAmount} ${symbol} | ${equivalentInUSD}`;
+            },
+            headerName: 'Amt Supplied',
+            width: 125,
+            cellRenderer: NumberRendererWithUSD
+        },
+        {
+            valueGetter: (params) => {
+                const tokenAmount = prettyNumber(params.data.totalDebt, 'number-short');
+                const symbol = params.data.symbol;
+                const equivalentInUSD = `${prettyNumber((params.data.totalDebt * params.data.oraclePrice), 'number-short')}`;  // Assuming you have the price
+                return `${tokenAmount} ${symbol} | ${equivalentInUSD}`;
+            },
+            headerName: 'Amt Borrowed',
+            width: 125,
+            cellRenderer: NumberRendererWithUSD
+        },
+        {
+            valueGetter: (params) => {
+                if (params.data.isIsolated) {
+                    const tokenAmount = prettyNumber(params.data.isolationModeTotalDebtUSD, 'number-short');
+                    const symbol = params.data.symbol;  // Assuming isolationModeTotalDebtUSD is always in USD
+                    const equivalentInUSD = `${prettyNumber((params.data.isolationModeTotalDebtUSD * params.data.oraclePrice), 'number-short')}`;  // Assuming you have the price
+                    return `${tokenAmount} ${symbol} | ${equivalentInUSD}`;
+                }
+                return '0 USD | 0';
+            },
+            headerName: 'Current Debt',
+            width: 150,
+            cellRenderer: NumberRendererWithUSD,
+            headerTooltip: "Current debt for isolation mode assets"
+        },
 
-        {
-            valueGetter: (a) => `${prettyNumber(a.data.totalLiquidity, 'number-short')} ${a.data.symbol}`,
-            headerName: 'Amt Supplied', width: 125, cellRenderer: NumberRendererWithUSD
-        },
-        {
-            valueGetter: (a) => `${prettyNumber(a.data.totalDebt, 'number-short')} ${a.data.symbol}`,
-            headerName: 'Amt Borrowed', width: 125, cellRenderer: NumberRendererWithUSD
-        },
-         // New "Current Debt" column for isolation mode
-    {
-        valueGetter: (a) => a.data.isIsolated ? `${prettyNumber(a.data.isolationModeTotalDebtUSD, 'number-short')} USD` : '0 USD',
-        headerName: 'Current Debt', width: 150, cellRenderer: NumberRendererWithUSD,
-        headerTooltip: "Current debt for isolation mode assets"
-    },
         { field: "utilizationRate", headerName: 'U%', width: 100, cellRenderer: NumberRenderer, headerTooltip: "Utilization Percentage" },
 
         {
@@ -111,27 +135,41 @@ const Datatable = (props: IProps) => {
             headerName: 'Debt Ceiling', width: 125, cellRenderer: NumberRenderer
         },
         {
-            valueGetter: (a) => `${prettyNumber(a.data.supplyCap, 'number-short')} ${a.data.symbol}`,
-            field: "supplyCap", headerName: 'Supply Cap', width: 125, cellRenderer: NumberRendererWithUSD
+            valueGetter: (params) => {
+                const tokenAmount = prettyNumber(params.data.supplyCap, 'number-short');
+                const symbol = params.data.symbol;
+                const equivalentInUSD = `${prettyNumber((params.data.supplyCap * params.data.oraclePrice), 'number-short')}`;  // Assuming you have the price
+                return `${tokenAmount} ${symbol} | ${equivalentInUSD}`;
+            },
+            headerName: 'Supply Cap',
+            width: 125,
+            cellRenderer: NumberRendererWithUSD
         },
         {
-            valueGetter: (a) => `${prettyNumber(a.data.borrowCap, 'number-short')} ${a.data.symbol}`,
-            field: "borrowCap", headerName: 'Borrow Cap', width: 125, cellRenderer: NumberRendererWithUSD
+            valueGetter: (params) => {
+                const tokenAmount = prettyNumber(params.data.borrowCap, 'number-short');
+                const symbol = params.data.symbol;
+                const equivalentInUSD = `${prettyNumber((params.data.borrowCap * params.data.oraclePrice), 'number-short')}`;  // Assuming you have the price
+                return `${tokenAmount} ${symbol} | ${equivalentInUSD}`;
+            },
+            headerName: 'Borrow Cap',
+            width: 125,
+            cellRenderer: NumberRendererWithUSD
         },
-        { field: "supplyCapUtilized", headerName: 'Supply Cap %', width: 150, cellRenderer: NumberRendererWithUSD },
-        { field: "borrowCapUtilized", headerName: 'Borrow Cap %', width: 150, cellRenderer: NumberRendererWithUSD },
+
+        { field: "supplyCapUtilized", headerName: 'Supply Cap %', width: 150, cellRenderer: NumberRenderer },
+        { field: "borrowCapUtilized", headerName: 'Borrow Cap %', width: 150, cellRenderer: NumberRenderer },
         {
 
             valueGetter: (a) => a.data.debtCeiling === 0 ? '0.00 %' : `${(a.data.isolationModeTotalDebtUSD * 100 / a.data.debtCeiling).toFixed(2)} %`,
-            headerName: 'Debt Ceiling %', width: 150, cellRenderer: NumberRendererWithUSD
+            headerName: 'Debt Ceiling %', width: 150, cellRenderer: NumberRenderer
         },
+
         { field: "eModeLtv", headerName: 'eMode LTV', width: 125, cellRenderer: NumberRenderer },
         { field: "eModeLiquidationThereshold", headerName: 'eMode LT', width: 100, cellRenderer: NumberRenderer },
         { field: "eModeLiquidationBonus", headerName: 'eMode LB', width: 100, cellRenderer: NumberRenderer },
-        {
-            valueGetter: (a) => "eMode Category", // This is where you define how to extract or compute the e-mode category
-            headerName: 'eMode Category', width: 150, cellRenderer: NumberRenderer
-        },
+      
+         { field: "eModeCategoryId", headerName: 'Emode Category', width: 150, cellRenderer: StringRenderer },
 
         {
             valueGetter: (a) => `${prettyNumber(a.data.oraclePrice, 'number-short')} USD`,
@@ -155,14 +193,14 @@ const Datatable = (props: IProps) => {
         <div
             // style={{ textAlign: 'center' }}
             className={
-               "ag-theme-quartz"
+                "ag-theme-quartz"
             }
         >
             <AgGridReact
                 ref={gridRef}
                 tooltipShowMode='standard'
                 tooltipShowDelay={500}
-                onGridReady={onGridReady} 
+                onGridReady={onGridReady}
                 rowData={props.data}
                 columnDefs={columnDefs}
             />
