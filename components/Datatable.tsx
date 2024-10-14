@@ -9,12 +9,14 @@ import React, { useRef, } from "react";
 import { Aavev3 } from "../utils/interfaces";
 import { prettyNumber } from '@based/pretty-number'
 import NumberRendererWithUSD from "./cells/NumberRendererWithUSD";
+import "../styles/Home.module.css"
 
 interface IProps {
     data: Aavev3[];
 }
 
 const Datatable = (props: IProps) => {
+    console.log("props.data",props.data)
     const gridRef = useRef<AgGridReact<any>>(null);
 
     const formatEVMAddress = (address: string) => `${address.slice(0, 6)}...${address.slice(-4)}`;
@@ -32,6 +34,22 @@ const Datatable = (props: IProps) => {
             copy: data[key]
         }
     }
+    const parseLiquidationPremium = (premiumString:string) => {
+        if (!premiumString) return 0; // Default to 0 if no value exists
+        const parsedValue = parseFloat(premiumString.replace('%', '').trim());
+        return isNaN(parsedValue) ? 0 : parsedValue;
+    };
+    // Apply sticky header styles in onGridReady
+    const onGridReady = (params: any) => {
+        // Access the header container via the DOM
+        const headerElement = document.querySelector('.ag-header') as HTMLElement;
+        if (headerElement) {
+            headerElement.style.position = 'sticky';
+            headerElement.style.top = '0';
+            headerElement.style.zIndex = '10';
+            headerElement.style.backgroundColor = 'white'; // Ensure it's visible
+        }
+    };
 
     const columnDefs: ColDef[] = [
         {
@@ -49,12 +67,18 @@ const Datatable = (props: IProps) => {
 
         {
             valueGetter: (a) => `${prettyNumber(a.data.totalLiquidity, 'number-short')} ${a.data.symbol}`,
-            headerName: 'Supplied', width: 125, cellRenderer: NumberRendererWithUSD
+            headerName: 'Amt Supplied', width: 125, cellRenderer: NumberRendererWithUSD
         },
         {
             valueGetter: (a) => `${prettyNumber(a.data.totalDebt, 'number-short')} ${a.data.symbol}`,
-            headerName: 'Borrowed', width: 125, cellRenderer: NumberRendererWithUSD
+            headerName: 'Amt Borrowed', width: 125, cellRenderer: NumberRendererWithUSD
         },
+         // New "Current Debt" column for isolation mode
+    {
+        valueGetter: (a) => a.data.isIsolated ? `${prettyNumber(a.data.isolationModeTotalDebtUSD, 'number-short')} USD` : '0 USD',
+        headerName: 'Current Debt', width: 150, cellRenderer: NumberRendererWithUSD,
+        headerTooltip: "Current debt for isolation mode assets"
+    },
         { field: "utilizationRate", headerName: 'U%', width: 100, cellRenderer: NumberRenderer, headerTooltip: "Utilization Percentage" },
 
         {
@@ -69,6 +93,14 @@ const Datatable = (props: IProps) => {
         {
             field: "liqBonus", headerName: 'LB %', width: 75, cellRenderer: NumberRenderer,
             headerTooltip: "Liquidation Bonus"
+        },
+        {
+            headerName: 'Liquidation Premium',
+            valueGetter: (params) => {
+                const liquidationPremium = parseLiquidationPremium(params.data.eModeLiquidationBonus);
+                return `${liquidationPremium.toFixed(2)} %`;
+            },
+            width: 150
         },
         { field: "reserveFactor", headerName: 'RF %', width: 75, cellRenderer: NumberRenderer, headerTooltip: "Reserve Factor" },
         { valueGetter: () => 'TODO', headerName: 'Liq Fee %', width: 100, cellRenderer: NumberRenderer, headerTooltip: "Liquidation Protocol Fee" },
@@ -97,6 +129,11 @@ const Datatable = (props: IProps) => {
         { field: "eModeLiquidationThereshold", headerName: 'eMode LT', width: 100, cellRenderer: NumberRenderer },
         { field: "eModeLiquidationBonus", headerName: 'eMode LB', width: 100, cellRenderer: NumberRenderer },
         {
+            valueGetter: (a) => "eMode Category", // This is where you define how to extract or compute the e-mode category
+            headerName: 'eMode Category', width: 150, cellRenderer: NumberRenderer
+        },
+
+        {
             valueGetter: (a) => `${prettyNumber(a.data.oraclePrice, 'number-short')} USD`,
             field: "oraclePrice", headerName: 'Price', width: 100, cellRenderer: NumberRenderer
         },
@@ -116,15 +153,16 @@ const Datatable = (props: IProps) => {
 
     return (
         <div
-            style={{ height: "800px", width: "100%", textAlign: 'center' }}
+            // style={{ textAlign: 'center' }}
             className={
-                "ag-theme-quartz"
+               "ag-theme-quartz"
             }
         >
             <AgGridReact
                 ref={gridRef}
                 tooltipShowMode='standard'
                 tooltipShowDelay={500}
+                onGridReady={onGridReady} 
                 rowData={props.data}
                 columnDefs={columnDefs}
             />
