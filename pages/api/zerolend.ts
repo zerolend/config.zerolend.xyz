@@ -101,7 +101,6 @@ export default async function handler(
       marketReferencePriceInUsd:
         reserves.baseCurrencyData.marketReferenceCurrencyPriceInUsd,
     });
-    console.log("reserves",formattedPoolReserves[0])
     // console.log(formattedPoolReserves);
     const reservesArray = formattedPoolReserves.map((n) => ({
       symbol: n.symbol,
