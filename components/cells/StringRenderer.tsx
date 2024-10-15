@@ -7,7 +7,7 @@ const StringRenderer = (params: CustomCellRendererProps) => {
     // Set default text based on eModeCategoryId value
     let displayValue = 'Unknown'; // Default value
     if (value === 0) {
-        displayValue = 'destable';  // Return "stable" if eModeCategoryId is 0
+        displayValue = 'Volatile';  // Return "stable" if eModeCategoryId is 0
     } else if (value === 1) {
         displayValue = 'Stable';  // Return "destable" if eModeCategoryId is 1
     }
@@ -17,7 +17,7 @@ const StringRenderer = (params: CustomCellRendererProps) => {
 
     return (
         <span className="missionSpan" style={{ opacity }}>
-            {displayValue}
+            {value} ({displayValue})
         </span>
     );
 }
