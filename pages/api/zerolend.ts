@@ -91,6 +91,7 @@ export default async function handler(
     const reserves = await poolDataProviderContract.getReservesHumanized({
       lendingPoolAddressProvider,
     });
+   
 
     const formattedPoolReserves = formatReserves({
       reserves: reserves.reservesData,
@@ -100,7 +101,6 @@ export default async function handler(
       marketReferencePriceInUsd:
         reserves.baseCurrencyData.marketReferenceCurrencyPriceInUsd,
     });
-
     // console.log(formattedPoolReserves);
     const reservesArray = formattedPoolReserves.map((n) => ({
       symbol: n.symbol,
@@ -155,6 +155,7 @@ export default async function handler(
       varAToken: n.variableDebtTokenAddress,
       underlying: n.underlyingAsset,
       interestRateAddress: n.interestRateStrategyAddress,
+      eModeCategoryId:n.eModeCategoryId,
       assetLink:
         "https://app.zerolend.xyz/reserve-overview/?underlyingAsset=" +
         n.id.slice(n.id.indexOf("-") + 1, n.id.lastIndexOf("-")) +
