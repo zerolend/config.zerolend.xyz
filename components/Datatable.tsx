@@ -17,7 +17,7 @@ interface IProps {
 }
 
 const Datatable = (props: IProps) => {
-   
+
     const gridRef = useRef<AgGridReact<any>>(null);
 
     const formatEVMAddress = (address: string) => `${address.slice(0, 6)}...${address.slice(-4)}`;
@@ -126,6 +126,26 @@ const Datatable = (props: IProps) => {
             },
             width: 150
         },
+        {
+            field: "feesAnnual", headerName: 'Fees YR', width: 125,
+            valueGetter: (a) => `${prettyNumber(a.data.feesAnnual, 'number-short')} USD`,
+            cellRenderer: NumberRenderer, headerTooltip: "Fees Annualy"
+        },
+        {
+            field: "revenueDaily", headerName: 'Revenue D', width: 125,
+            valueGetter: (a) => `${prettyNumber(a.data.revenueDaily, 'number-short')} USD`,
+            cellRenderer: NumberRenderer, headerTooltip: "Revenue Daily"
+        },
+        {
+            field: "revenueMonthly", headerName: 'Revenue M', width: 125,
+            valueGetter: (a) => `${prettyNumber(a.data.revenueMonthly, 'number-short')} USD`,
+            cellRenderer: NumberRenderer, headerTooltip: "Revenue Monthly"
+        },
+        {
+            field: "revenueAnnual", headerName: 'Revenue YR', width: 125,
+            valueGetter: (a) => `${prettyNumber(a.data.revenueAnnual, 'number-short')} USD`,
+            cellRenderer: NumberRenderer, headerTooltip: "Revenue Annualy"
+        },
         { field: "reserveFactor", headerName: 'RF %', width: 75, cellRenderer: NumberRenderer, headerTooltip: "Reserve Factor" },
         { valueGetter: () => 'TODO', headerName: 'Liq Fee %', width: 100, cellRenderer: NumberRenderer, headerTooltip: "Liquidation Protocol Fee" },
         { field: "optimalUtilization", headerName: 'OU %', width: 75, cellRenderer: NumberRenderer, headerTooltip: "Optimal Utilization" },
@@ -168,8 +188,8 @@ const Datatable = (props: IProps) => {
         { field: "eModeLtv", headerName: 'eMode LTV', width: 125, cellRenderer: NumberRenderer },
         { field: "eModeLiquidationThereshold", headerName: 'eMode LT', width: 100, cellRenderer: NumberRenderer },
         { field: "eModeLiquidationBonus", headerName: 'eMode LB', width: 100, cellRenderer: NumberRenderer },
-      
-         { field: "eModeCategoryId", headerName: 'Emode Category', width: 150, cellRenderer: StringRenderer },
+
+        { field: "eModeCategoryId", headerName: 'Emode Category', width: 150, cellRenderer: StringRenderer },
 
         {
             valueGetter: (a) => `${prettyNumber(a.data.oraclePrice, 'number-short')} USD`,
@@ -191,6 +211,7 @@ const Datatable = (props: IProps) => {
 
     return (
         <div
+            id="main-datatable"
             // style={{ textAlign: 'center' }}
             className={
                 "ag-theme-quartz"

@@ -91,7 +91,6 @@ export default async function handler(
     const reserves = await poolDataProviderContract.getReservesHumanized({
       lendingPoolAddressProvider,
     });
-   
 
     const formattedPoolReserves = formatReserves({
       reserves: reserves.reservesData,
@@ -101,67 +100,84 @@ export default async function handler(
       marketReferencePriceInUsd:
         reserves.baseCurrencyData.marketReferenceCurrencyPriceInUsd,
     });
+
     // console.log(formattedPoolReserves);
-    const reservesArray = formattedPoolReserves.map((n) => ({
-      symbol: n.symbol,
-      frozen: n.isFrozen ? "True" : "False",
-      paused: n.isPaused ? "True" : "False",
-      canCollateral: n.usageAsCollateralEnabled ? "True" : "False",
-      LTV: parseInt(n.baseLTVasCollateral) / 100 + " %",
-      liqThereshold: parseInt(n.reserveLiquidationThreshold) / 100 + " %",
-      liqBonus: parseInt(n.reserveLiquidationBonus.slice(-3)) / 100 + " %",
-      reserveFactor: parseFloat(n.reserveFactor) * 100 + " %",
-      canBorrow: n.borrowingEnabled ? "True" : "False",
-      optimalUtilization:
-        ((parseInt(n.optimalUsageRatio) / 10 ** 27) * 100).toFixed(0) + " %",
-      varBorrowRate: (parseFloat(n.variableBorrowAPY) * 100).toFixed(2) + " %",
-      canBorrowStable: n.stableBorrowRateEnabled ? "True" : "False",
-      stableBorrowRate: (parseFloat(n.stableBorrowAPY) * 100).toFixed(2) + " %",
-      shareOfStableRate:
-        parseInt(n.totalDebtUSD) === 0 || parseInt(n.totalStableDebtUSD) === 0
-          ? "0%"
-          : (
-              (parseInt(n.totalStableDebtUSD) / parseInt(n.totalDebtUSD)) *
-              100
-            ).toFixed(2) + "%",
-      isIsolated: n.debtCeiling === "0" ? "False" : "True",
-      debtCeiling: parseFloat(n.debtCeiling) / 100,
-      isolationModeTotalDebtUSD: parseFloat(n.isolationModeTotalDebtUSD),
-      availableDebtCeilingUSD: parseFloat(n.availableDebtCeilingUSD),
-      supplyCap: parseFloat(n.supplyCap),
-      borrowCap: parseFloat(n.borrowCap),
-      eModeLtv: n.eModeLtv / 100 + " %",
-      eModeLiquidationThereshold: n.eModeLiquidationThreshold / 100 + " %",
-      totalDebt: parseFloat(n.totalDebt),
-      totalLiquidity: parseFloat(n.totalLiquidity),
-      eModeLiquidationBonus:
-        parseInt(n.eModeLiquidationBonus.toString().slice(-3)) / 100 + " %",
-      borrowableInIsolation: n.borrowableInIsolation ? "True" : "False",
-      flashloanEnabled: n.flashLoanEnabled ? "True" : "False",
-      supplyCapUtilized: isNaN(getSupplyCapData(n).supplyCapUsage)
-        ? "N/A"
-        : getSupplyCapData(n).supplyCapUsage.toFixed(2) + " %",
-      borrowCapUtilized: isNaN(getBorrowCapData(n).borrowCapUsage)
-        ? "N/A"
-        : getBorrowCapData(n).borrowCapUsage.toFixed(2) + " %",
-      utilizationRate:
-        n.borrowUsageRatio === "0" || !n.borrowUsageRatio
+    const reservesArray = formattedPoolReserves.map((n) => {
+      const borrowedUSD = Number(n.totalDebt) * Number(n.priceInUSD);
+      const fees = Number(n.variableBorrowAPY) * borrowedUSD;
+      const revenue = fees * Number(n.reserveFactor);
+
+      return {
+        symbol: n.symbol,
+        frozen: n.isFrozen ? "True" : "False",
+        paused: n.isPaused ? "True" : "False",
+        canCollateral: n.usageAsCollateralEnabled ? "True" : "False",
+        LTV: parseInt(n.baseLTVasCollateral) / 100 + " %",
+        liqThereshold: parseInt(n.reserveLiquidationThreshold) / 100 + " %",
+        liqBonus: parseInt(n.reserveLiquidationBonus.slice(-3)) / 100 + " %",
+        reserveFactor: parseFloat(n.reserveFactor) * 100 + " %",
+        canBorrow: n.borrowingEnabled ? "True" : "False",
+        optimalUtilization:
+          ((parseInt(n.optimalUsageRatio) / 10 ** 27) * 100).toFixed(0) + " %",
+
+        feesDaily: fees / 365,
+        feesMonthly: fees / 12,
+        feesAnnual: fees,
+        revenueDaily: revenue / 365,
+        revenueMonthly: revenue / 12,
+        revenueAnnual: revenue,
+
+        varBorrowRate:
+          (parseFloat(n.variableBorrowAPY) * 100).toFixed(2) + " %",
+        canBorrowStable: n.stableBorrowRateEnabled ? "True" : "False",
+        stableBorrowRate:
+          (parseFloat(n.stableBorrowAPY) * 100).toFixed(2) + " %",
+        shareOfStableRate:
+          parseInt(n.totalDebtUSD) === 0 || parseInt(n.totalStableDebtUSD) === 0
+            ? "0%"
+            : (
+                (parseInt(n.totalStableDebtUSD) / parseInt(n.totalDebtUSD)) *
+                100
+              ).toFixed(2) + "%",
+        isIsolated: n.debtCeiling === "0" ? "False" : "True",
+        debtCeiling: parseFloat(n.debtCeiling) / 100,
+        isolationModeTotalDebtUSD: parseFloat(n.isolationModeTotalDebtUSD),
+        availableDebtCeilingUSD: parseFloat(n.availableDebtCeilingUSD),
+        supplyCap: parseFloat(n.supplyCap),
+        borrowCap: parseFloat(n.borrowCap),
+        eModeLtv: n.eModeLtv / 100 + " %",
+        eModeLiquidationThereshold: n.eModeLiquidationThreshold / 100 + " %",
+        totalDebt: parseFloat(n.totalDebt),
+        totalLiquidity: parseFloat(n.totalLiquidity),
+        eModeLiquidationBonus:
+          parseInt(n.eModeLiquidationBonus.toString().slice(-3)) / 100 + " %",
+        borrowableInIsolation: n.borrowableInIsolation ? "True" : "False",
+        flashloanEnabled: n.flashLoanEnabled ? "True" : "False",
+        supplyCapUtilized: isNaN(getSupplyCapData(n).supplyCapUsage)
           ? "N/A"
-          : (parseFloat(n.borrowUsageRatio) * 100).toFixed(2) + " %",
-      priceOracleAddress: n.priceOracle,
-      oraclePrice: parseFloat(n.priceInUSD),
-      explorer: chainIdToExplorerUrl[chainId],
-      aToken: n.aTokenAddress,
-      varAToken: n.variableDebtTokenAddress,
-      underlying: n.underlyingAsset,
-      interestRateAddress: n.interestRateStrategyAddress,
-      eModeCategoryId:n.eModeCategoryId,
-      assetLink:
-        "https://app.zerolend.xyz/reserve-overview/?underlyingAsset=" +
-        n.id.slice(n.id.indexOf("-") + 1, n.id.lastIndexOf("-")) +
-        "&marketName=" +
-        config.marketName,
-    }));
+          : getSupplyCapData(n).supplyCapUsage.toFixed(2) + " %",
+        borrowCapUtilized: isNaN(getBorrowCapData(n).borrowCapUsage)
+          ? "N/A"
+          : getBorrowCapData(n).borrowCapUsage.toFixed(2) + " %",
+        utilizationRate:
+          n.borrowUsageRatio === "0" || !n.borrowUsageRatio
+            ? "N/A"
+            : (parseFloat(n.borrowUsageRatio) * 100).toFixed(2) + " %",
+        priceOracleAddress: n.priceOracle,
+        oraclePrice: parseFloat(n.priceInUSD),
+        explorer: chainIdToExplorerUrl[chainId],
+        aToken: n.aTokenAddress,
+        varAToken: n.variableDebtTokenAddress,
+        underlying: n.underlyingAsset,
+        interestRateAddress: n.interestRateStrategyAddress,
+        eModeCategoryId: n.eModeCategoryId,
+        assetLink:
+          "https://app.zerolend.xyz/reserve-overview/?underlyingAsset=" +
+          n.id.slice(n.id.indexOf("-") + 1, n.id.lastIndexOf("-")) +
+          "&marketName=" +
+          config.marketName,
+      };
+    });
 
     res.status(200).json({ data: reservesArray, flashloanPremium });
   } catch (e) {

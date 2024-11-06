@@ -51,6 +51,13 @@ interface Aavev3 {
   eModeLiquidationBonus: string;
   assetLink: string;
 
+  feesDaily: number,
+  feesMonthly: number,
+  feesAnnual: number,
+  revenueDaily: number,
+  revenueMonthly: number,
+  revenueAnnual: number,
+
   priceOracleAddress: string
   oraclePrice: string
   explorer: string

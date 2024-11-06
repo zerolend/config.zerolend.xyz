@@ -4,8 +4,8 @@ import { marketConfigZerolend } from "./marketconfig_zerolend";
 export const markets = {
   zerolend: [
     {
-      name: "ethereum eth lrt",
-      config: marketConfigZerolend.ethereum_eth_lrt,
+      name: "linea",
+      config: marketConfigZerolend.linea,
     },
     {
       name: "ethereum btc lrt",
@@ -18,6 +18,10 @@ export const markets = {
     {
       name: "base",
       config: marketConfigZerolend.base,
+    },
+    {
+      name: "ethereum eth lrt",
+      config: marketConfigZerolend.ethereum_eth_lrt,
     },
     {
       name: "zksync",
@@ -35,10 +39,7 @@ export const markets = {
       name: "ziruit",
       config: marketConfigZerolend.zircuit,
     },
-    {
-      name: "linea",
-      config: marketConfigZerolend.linea,
-    },
+
     {
       name: "blast",
       config: marketConfigZerolend.blast,

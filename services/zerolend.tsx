@@ -16,6 +16,7 @@ const fetchReservesAny = async (
       `/api/zerolend?chainId=${config.chainId}&marketName=${config.marketName}&protocol=${protocol}&lendingPoolAddressProvider=${config.LENDING_POOL_ADDRESS_PROVIDER}&uiDataProvider=${config.UI_POOL_DATA_PROVIDER}&pool=${config.POOL}`
     );
     const reservesArray = await response.json();
+
     return {
       data: reservesArray.data,
       flashloanPremium: reservesArray.flashloanPremium,

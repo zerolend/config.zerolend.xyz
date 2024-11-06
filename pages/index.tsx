@@ -9,6 +9,7 @@ import Datatable from "../components/Datatable";
 import styles from "../styles/Home.module.css";
 import type { NextPage } from "next";
 import zerolendService from "../services/zerolend";
+import InfoDatatable from "../components/InfoDatatable";
 
 const Home: NextPage = () => {
   const [tableData, setTableData] = useState<Aavev3[]>([]);
@@ -71,6 +72,7 @@ const Home: NextPage = () => {
         />
 
       </ThemeProvider>
+      <InfoDatatable data={tableData} flashLoanPremium={flashLoanPremium} />
       <Datatable data={tableData} />
     </div>
   );
