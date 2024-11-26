@@ -18,6 +18,8 @@ const chainIdToRPCProvider: Record<number, string> = {
   81457: "https://rpc.ankr.com/blast",
   8453: "https://mainnet.base.org",
   59144: "https://rpc.linea.build",
+  48900: "https://zircuit1-mainnet.liquify.com",
+  196: "https://xlayerrpc.okx.com",
 };
 
 const chainIdToExplorerUrl: Record<number, string> = {
@@ -27,6 +29,8 @@ const chainIdToExplorerUrl: Record<number, string> = {
   81457: "https://blastexplorer.io",
   8453: "https://basescan.org",
   59144: "https://lineascan.build",
+  48900: "https://explorer.zircuit.com",
+  196: "https://www.okx.com/web3/explorer/xlayer",
 };
 
 type configInterface = {
