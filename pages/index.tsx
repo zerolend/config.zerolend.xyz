@@ -36,7 +36,7 @@ const Home: NextPage = () => {
         const newDatas = [...prev];
         newDatas[i] = {
           name: market.name,
-          revenueMonthly: revenue / 12 / (market.name == 'linea' ? 2 : 1),
+          revenueMonthly: revenue / 12 / (market.name == 'linea' ? 2 : 1) * (market.name == 'manta' ? 0 : 1),
           totalBorrowed: totalBorrowed,
           totalSupplied: totalSupplied,
           data: data?.data,
