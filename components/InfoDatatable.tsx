@@ -61,36 +61,36 @@ const InfoDatatable = (props: IProps) => {
             valueUSD: totalBorrowed + totalSupplied,
             valuePercentage: `0 %`
         },
-        {
-            label: 'Revenue Daily',
-            value: 0,
-            valueUSD: Math.floor(revenue / 365),
-            valuePercentage: `0 %`
-        },
-        {
-            label: 'Revenue Annually',
-            value: 0,
-            valueUSD: Math.floor(revenue),
-            valuePercentage: `0 %`
-        },
-        {
-            label: 'Flashloan Premium',
-            // value: props.flashLoanPremium,
-            valueUSD: 0,
-            valuePercentage: `${props.flashLoanPremium} %`
-        },
+        // {
+        //     label: 'Revenue Daily',
+        //     value: 0,
+        //     valueUSD: Math.floor(revenue / 365),
+        //     valuePercentage: `0 %`
+        // },
+        // {
+        //     label: 'Revenue Annually',
+        //     value: 0,
+        //     valueUSD: Math.floor(revenue),
+        //     valuePercentage: `0 %`
+        // },
+        // {
+        //     label: 'Flashloan Premium',
+        //     // value: props.flashLoanPremium,
+        //     valueUSD: 0,
+        //     valuePercentage: `${props.flashLoanPremium} %`
+        // },
         {
             label: 'Total Supplied',
             // value: props.flashLoanPremium,
             valueUSD: totalSupplied,
             valuePercentage: `0 %`
         },
-        {
-            label: 'Fees Annually',
-            value: 0,
-            valueUSD: fees,
-            valuePercentage: `0 %`
-        }
+        // {
+        //     label: 'Fees Annually',
+        //     value: 0,
+        //     valueUSD: fees,
+        //     valuePercentage: `0 %`
+        // }
     ]
 
     return (

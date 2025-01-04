@@ -49,7 +49,7 @@ a {
 #info-datatable .ag-root-wrapper.ag-layout-normal {
   /* height: 100%; */
   width: 370px;
-  min-height: 50vh !important;
+  min-height: 30vh !important;
 }
 
 #main-datatable .ag-root-wrapper.ag-layout-normal {
