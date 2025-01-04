@@ -22,7 +22,7 @@ const fetchReservesAny = async (
       flashloanPremium: reservesArray.flashloanPremium,
     };
   } catch (err) {
-    alert("something went wrong fetching data, please contact the team");
+    console.log("something went wrong fetching data, please contact the team");
   }
 };
 

@@ -3,6 +3,8 @@ import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import * as Fathom from "fathom-client";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-quartz.css";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();

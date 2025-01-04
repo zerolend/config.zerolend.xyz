@@ -2,7 +2,7 @@ import { CssBaseline, SelectChangeEvent, } from "@mui/material";
 import { Aavev3, } from "../utils/interfaces";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { markets } from "../utils/markets";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import Dropdown from "../components/Dropdown";
 import Head from "next/head";
 import Datatable from "../components/Datatable";
@@ -12,32 +12,39 @@ import zerolendService from "../services/zerolend";
 import InfoDatatable from "../components/InfoDatatable";
 import "../styles/Home.module.css"
 
-interface Market {
-  name: string;
-  data: Aavev3[];
-  flashloanPremium: number;
-}
-
 const Home: NextPage = () => {
-  const [datas, setDatas] = useState<Market[]>([]);
+  const [tableData, setTableData] = useState<Aavev3[]>([]);
+  const [flashLoanPremium, setFlashloanPremium] = useState<
+    number | string | undefined
+  >(undefined);
+  const [selectedMarket, setSelectedMarket] = useState<string>("linea");
 
-  const downloadMarkets = useCallback(async () => {
-    for (let i = 0; i < markets.length; i++) {
-      const makret = markets[i];
-      const data = await zerolendService(makret.config, 'zerolend');
-      setDatas((prev) => {
-        const newDatas = [...prev];
-        newDatas[i] = {
-          name: makret.name,
-          data: data?.data,
-          flashloanPremium: data?.flashloanPremium,
-        };
-        return newDatas;
-      });
-    }
+  useEffect(() => {
+    const ethereum: any = markets.find(
+      (n: { name: string }) => n.name === "linea"
+    );
+
+    zerolendService(ethereum.config, 'zerolend').then((data) => {
+      setTableData(data?.data);
+      setFlashloanPremium(data?.flashloanPremium);
+    });
   }, []);
 
-  useEffect(() => { downloadMarkets() }, []);
+  const handleMarketChange = (event: SelectChangeEvent) => {
+    setSelectedMarket("");
+    setSelectedMarket(event.target.value);
+
+    if (!(event.target.value === "all")) {
+      const mkt = markets.find(
+        (n: { name: string }) => n.name === event.target.value
+      );
+      if (!mkt) return;
+      zerolendService(mkt.config, 'zerolend').then((data) => {
+        setTableData(data?.data);
+        setFlashloanPremium(data?.flashloanPremium);
+      });
+    }
+  };
 
   const theme = createTheme({
     palette: {
@@ -59,16 +66,15 @@ const Home: NextPage = () => {
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin='' />
           <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet" />
         </Head>
+        {/* <Dropdown
+          selectedMarket={selectedMarket}
+          market={markets.zerolend}
+          handleMarketChange={handleMarketChange}
+        /> */}
+
       </ThemeProvider>
-      <h1>config.zerolend.xyz</h1>
-      <p>Get a full summary of the entire zerolend protocol</p>
-      <div style={{ display: 'flex' }}>
-        {
-          datas.map(d =>
-            <InfoDatatable name={d.name} data={d.data} flashLoanPremium={d.flashloanPremium} key={d.name} />
-          )
-        }
-      </div>
+      {/* <InfoDatatable data={tableData} flashLoanPremium={flashLoanPremium} /> */}
+      <Datatable data={tableData} />
     </div>
   );
 };

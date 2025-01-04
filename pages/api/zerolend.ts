@@ -1,24 +1,21 @@
-import { NextApiRequest, NextApiResponse } from "next";
 import { Contract, ethers } from "ethers";
-import { UiPoolDataProvider } from "@aave/contract-helpers";
-import { formatReserves, normalizeBN } from "@aave/math-utils";
-import dayjs from "dayjs";
-import {
-  compactNumber,
-  getBorrowCapData,
-  getSupplyCapData,
-} from "../../utils/utils";
-import abi from "../../abis/abi.json";
+import { formatReserves } from "@aave/math-utils";
 import { formatUnits } from "ethers/lib/utils";
+import { getBorrowCapData, getSupplyCapData } from "../../utils/utils";
+import { NextApiRequest, NextApiResponse } from "next";
+import { UiPoolDataProvider } from "@aave/contract-helpers";
+import abi from "../../abis/abi.json";
+import dayjs from "dayjs";
 
 const chainIdToRPCProvider: Record<number, string> = {
-  1: "https://eth-mainnet.alchemyapi.io/v2/demo",
+  1: "https://eth.merkle.io",
   324: "https://mainnet.era.zksync.io",
   169: "https://pacific-rpc.manta.network/http",
   81457: "https://rpc.ankr.com/blast",
   8453: "https://mainnet.base.org",
   59144: "https://rpc.linea.build",
   48900: "https://zircuit1-mainnet.liquify.com",
+  21000000: "https://mainnet.corn-rpc.com",
   196: "https://xlayerrpc.okx.com",
 };
 
@@ -29,6 +26,7 @@ const chainIdToExplorerUrl: Record<number, string> = {
   81457: "https://blastexplorer.io",
   8453: "https://basescan.org",
   59144: "https://lineascan.build",
+  21000000: "https://cornscan.io/",
   48900: "https://explorer.zircuit.com",
   196: "https://www.okx.com/web3/explorer/xlayer",
 };
@@ -105,7 +103,6 @@ export default async function handler(
         reserves.baseCurrencyData.marketReferenceCurrencyPriceInUsd,
     });
 
-    // console.log(formattedPoolReserves);
     const reservesArray = formattedPoolReserves.map((n) => {
       const borrowedUSD = Number(n.totalDebt) * Number(n.priceInUSD);
       const fees = Number(n.variableBorrowAPY) * borrowedUSD;

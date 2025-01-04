@@ -1,5 +1,3 @@
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-quartz.css";
 import { AgGridReact } from "ag-grid-react";
 import { ColDef } from "ag-grid-community";
 import BooleanRenderer from "./cells/BooleanRenderer";
@@ -9,7 +7,6 @@ import React, { useRef, } from "react";
 import { Aavev3 } from "../utils/interfaces";
 import { prettyNumber } from '@based/pretty-number'
 import NumberRendererWithUSD from "./cells/NumberRendererWithUSD";
-import "../styles/Home.module.css"
 import StringRenderer from "./cells/StringRenderer";
 
 interface IProps {

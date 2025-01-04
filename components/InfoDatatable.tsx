@@ -9,6 +9,7 @@ import NumberRendererWithUSD from "./cells/NumberRendererWithUSD";
 import { prettyNumber } from "@based/pretty-number";
 
 interface IProps {
+    name: string
     data: Aavev3[];
     flashLoanPremium: number | string | undefined;
 }
@@ -19,16 +20,11 @@ const InfoDatatable = (props: IProps) => {
             field: "label",
             headerName: "Label",
             maxWidth: 200,
-
             cellStyle: { fontWeight: 'bold' },
         },
         {
-            field: "valueUSD", headerName: 'Value USD', width: 150,
-            valueGetter: (a) => `${prettyNumber(a.data.valueUSD, 'number-short')} USD`,
-            cellRenderer: NumberRenderer,
-        },
-        {
-            field: "valuePercentage", headerName: 'Value %', width: 150,
+            field: "valueUSD", headerName: 'Value', width: 150,
+            valueGetter: (a) => a.data.value ? a.data.value : a.data.valuePercentage > 0 ? a.data.valuePercentage : `${prettyNumber(a.data.valueUSD, 'number-short')} USD`,
             cellRenderer: NumberRenderer,
         },
     ];
@@ -42,15 +38,15 @@ const InfoDatatable = (props: IProps) => {
 
     const rowData = [
         {
-            label: 'Flashloan Premium',
-            // value: props.flashLoanPremium,
+            label: 'Market Name',
+            value: props.name,
             valueUSD: 0,
-            valuePercentage: `${props.flashLoanPremium} %`
+            valuePercentage: `0 %`
         },
         {
-            label: 'Total Supplied',
-            // value: props.flashLoanPremium,
-            valueUSD: totalSupplied,
+            label: 'Revenue Monthly',
+            value: 0,
+            valueUSD: Math.floor(revenue / 12),
             valuePercentage: `0 %`
         },
         {
@@ -66,21 +62,9 @@ const InfoDatatable = (props: IProps) => {
             valuePercentage: `0 %`
         },
         {
-            label: 'Fees Annually',
-            value: 0,
-            valueUSD: fees,
-            valuePercentage: `0 %`
-        },
-        {
             label: 'Revenue Daily',
             value: 0,
             valueUSD: Math.floor(revenue / 365),
-            valuePercentage: `0 %`
-        },
-        {
-            label: 'Revenue Monthly',
-            value: 0,
-            valueUSD: Math.floor(revenue / 12),
             valuePercentage: `0 %`
         },
         {
@@ -88,18 +72,37 @@ const InfoDatatable = (props: IProps) => {
             value: 0,
             valueUSD: Math.floor(revenue),
             valuePercentage: `0 %`
+        },
+        {
+            label: 'Flashloan Premium',
+            // value: props.flashLoanPremium,
+            valueUSD: 0,
+            valuePercentage: `${props.flashLoanPremium} %`
+        },
+        {
+            label: 'Total Supplied',
+            // value: props.flashLoanPremium,
+            valueUSD: totalSupplied,
+            valuePercentage: `0 %`
+        },
+        {
+            label: 'Fees Annually',
+            value: 0,
+            valueUSD: fees,
+            valuePercentage: `0 %`
         }
     ]
 
     return (
         <div
-            // style={{ textAlign: 'center' }}
+            style={{ display: 'inline-block', marginRight: 5 }}
             className={
                 "ag-theme-quartz"
             }
             id="info-datatable"
         >
             <AgGridReact
+
                 // isFullWidthRow={false}
                 rowData={rowData}
                 columnDefs={columnDefs}
