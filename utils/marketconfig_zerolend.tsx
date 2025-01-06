@@ -3,7 +3,7 @@ import { ChainId } from "@aave/contract-helpers";
 export const marketConfigZerolend = {
   ethereum_eth_lrt: {
     chainId: ChainId.mainnet,
-    publicJsonRPCUrl: "https://eth.merkle.io",
+    publicJsonRPCUrl: "https://rpc.ankr.com/eth",
     LENDING_POOL_ADDRESS_PROVIDER: '0xFD856E1a33225B86f70D686f9280435E3fF75FCF',
     UI_POOL_DATA_PROVIDER: '0xa6EA08D16d47feE408505fda73520EbefC68Ef01',
     POOL: '0x3BC3D34C32cc98bf098D832364Df8A222bBaB4c0',
@@ -19,7 +19,7 @@ export const marketConfigZerolend = {
   },
   ethereum_btc_lrt: {
     chainId: ChainId.mainnet,
-    publicJsonRPCUrl: "https://eth.merkle.io",
+    publicJsonRPCUrl: "https://rpc.ankr.com/eth",
     LENDING_POOL_ADDRESS_PROVIDER: '0x17878AFdD5772F4Ec93c265Ac7Ad8E2b29abB857',
     UI_POOL_DATA_PROVIDER: '0xa6EA08D16d47feE408505fda73520EbefC68Ef01',
     POOL: '0xCD2b31071119D7eA449a9D211AC8eBF7Ee97F987',
@@ -27,7 +27,7 @@ export const marketConfigZerolend = {
   },
   ethereum_rwa: {
     chainId: ChainId.mainnet,
-    publicJsonRPCUrl: "https://eth.merkle.io",
+    publicJsonRPCUrl: "https://rpc.ankr.com/eth",
     LENDING_POOL_ADDRESS_PROVIDER: '0xe3c3c5ead58fc2bed4e577e38985b8f7f1ddff00',
     UI_POOL_DATA_PROVIDER: '0xa6EA08D16d47feE408505fda73520EbefC68Ef01',
     POOL: '0xD3a4DA66EC15a001466F324FA08037f3272BDbE8',
