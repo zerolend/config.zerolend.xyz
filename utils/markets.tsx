@@ -14,8 +14,16 @@ export const markets = [
     config: marketConfigZerolend.linea,
   },
   {
+    name: "zksync",
+    config: marketConfigZerolend.zksync,
+  },
+  {
     name: "corn mazinet",
     config: marketConfigZerolend.corn_mainnet,
+  },
+  {
+    name: "blast",
+    config: marketConfigZerolend.blast,
   },
   {
     name: "base",
@@ -24,10 +32,6 @@ export const markets = [
   {
     name: "ethereum eth lrt",
     config: marketConfigZerolend.ethereum_eth_lrt,
-  },
-  {
-    name: "zksync",
-    config: marketConfigZerolend.zksync,
   },
   {
     name: "xlayer",
@@ -40,10 +44,5 @@ export const markets = [
   {
     name: "ziruit",
     config: marketConfigZerolend.zircuit,
-  },
-
-  {
-    name: "blast",
-    config: marketConfigZerolend.blast,
   },
 ]

@@ -58,7 +58,7 @@ const Home: NextPage = () => {
   });
 
   return (
-    <div className={styles.container} suppressHydrationWarning>
+    <div className={styles.container} suppressHydrationWarning={true}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Head>
@@ -67,12 +67,6 @@ const Home: NextPage = () => {
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin='' />
           <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet" />
         </Head>
-        {/* <Dropdown
-          selectedMarket={selectedMarket}
-          market={markets.zerolend}
-          handleMarketChange={handleMarketChange}
-        /> */}
-
       </ThemeProvider>
       <br />
       <InfoDatatable name={market.name} data={data} id={market.config.marketName} flashLoanPremium={0} />

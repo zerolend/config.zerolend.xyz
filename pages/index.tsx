@@ -66,7 +66,7 @@ const Home: NextPage = () => {
   });
 
   return (
-    <div className={styles.container} suppressHydrationWarning>
+    <div className={styles.container} suppressHydrationWarning={true}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Head>
