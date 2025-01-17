@@ -7,8 +7,10 @@ import React, { useRef, } from "react";
 import { Aavev3 } from "../utils/interfaces";
 import NumberRendererWithUSD from "./cells/NumberRendererWithUSD";
 import { prettyNumber } from "@based/pretty-number";
+import { Box, Button } from "@mui/material";
 
 interface IProps {
+    id: string
     name: string
     data: Aavev3[];
     flashLoanPremium: number | string | undefined;
@@ -101,13 +103,10 @@ const InfoDatatable = (props: IProps) => {
             }
             id="info-datatable"
         >
-            <AgGridReact
-
-                // isFullWidthRow={false}
-                rowData={rowData}
-                columnDefs={columnDefs}
-            />
-
+            <AgGridReact rowData={rowData} columnDefs={columnDefs} />
+            <Box mt={2}>
+                <Button fullWidth variant='contained' href={"/config?market=" + props.id}>Open Market</Button>
+            </Box>
             <br />
         </div>
     );

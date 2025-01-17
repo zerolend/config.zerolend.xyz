@@ -12,6 +12,7 @@ import "../styles/Home.module.css"
 import { prettyNumber } from "@based/pretty-number";
 
 interface Market {
+  id: string;
   name: string;
   revenueMonthly: number
   totalBorrowed: number
@@ -35,6 +36,7 @@ const Home: NextPage = () => {
       setDatas((prev) => {
         const newDatas = [...prev];
         newDatas[i] = {
+          id: market.config.marketName,
           name: market.name,
           revenueMonthly: revenue / 12 / (market.name == 'linea' ? 2 : 1) * (market.name == 'manta' ? 0 : 1),
           totalBorrowed: totalBorrowed,
@@ -64,7 +66,7 @@ const Home: NextPage = () => {
   });
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} suppressHydrationWarning>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Head>
@@ -84,7 +86,7 @@ const Home: NextPage = () => {
       <div style={{ display: 'block' }}>
         {
           datas.map(d =>
-            <InfoDatatable name={d.name} data={d.data} flashLoanPremium={d.flashloanPremium} key={d.name} />
+            <InfoDatatable name={d.name} data={d.data} id={d.id} flashLoanPremium={d.flashloanPremium} key={d.id} />
           )
         }
       </div>

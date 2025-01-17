@@ -14,7 +14,6 @@ interface IProps {
 }
 
 const Datatable = (props: IProps) => {
-
     const gridRef = useRef<AgGridReact<any>>(null);
 
     const formatEVMAddress = (address: string) => `${address.slice(0, 6)}...${address.slice(-4)}`;
@@ -210,6 +209,7 @@ const Datatable = (props: IProps) => {
         <div
             id="main-datatable"
             // style={{ textAlign: 'center' }}
+            style={{ height: 750 }}
             className={
                 "ag-theme-quartz"
             }

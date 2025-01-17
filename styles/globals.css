@@ -33,9 +33,9 @@ a {
   font-size: 13px;
   margin-bottom: 5px;
 }
-.ag-theme-quartz > div {
+/* .ag-theme-quartz > div {
   height: auto !important;
-}
+} */
 .ag-root.ag-layout-normal {
   /* overflow-y: scroll !important; */
   height: 85vh !important;

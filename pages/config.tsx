@@ -11,40 +11,41 @@ import type { NextPage } from "next";
 import zerolendService from "../services/zerolend";
 import InfoDatatable from "../components/InfoDatatable";
 import "../styles/Home.module.css"
+import { useLocation } from "react-router-dom";
 
 const Home: NextPage = () => {
-  const [tableData, setTableData] = useState<Aavev3[]>([]);
-  const [flashLoanPremium, setFlashloanPremium] = useState<
-    number | string | undefined
-  >(undefined);
-  const [selectedMarket, setSelectedMarket] = useState<string>("linea");
+  const [market, setMarket] = useState<{
+    name: string;
+    config: {
+      chainId: number;
+      publicJsonRPCUrl: string;
+      LENDING_POOL_ADDRESS_PROVIDER: string;
+      UI_POOL_DATA_PROVIDER: string;
+      POOL: string;
+      marketName: string;
+    };
+  }>(markets[0]);
+
+  const [data, setData] = useState<Aavev3[]>([]);
+
 
   useEffect(() => {
-    const ethereum: any = markets.find(
-      (n: { name: string }) => n.name === "linea"
-    );
-
-    zerolendService(ethereum.config, 'zerolend').then((data) => {
-      setTableData(data?.data);
-      setFlashloanPremium(data?.flashloanPremium);
-    });
-  }, []);
-
-  const handleMarketChange = (event: SelectChangeEvent) => {
-    setSelectedMarket("");
-    setSelectedMarket(event.target.value);
-
-    if (!(event.target.value === "all")) {
-      const mkt = markets.find(
-        (n: { name: string }) => n.name === event.target.value
+    const match = window.location.search.match(/market=([^&]*)/)
+    if (match) {
+      const market = markets.find(
+        (n) => n.config.marketName === match[1]
       );
-      if (!mkt) return;
-      zerolendService(mkt.config, 'zerolend').then((data) => {
-        setTableData(data?.data);
-        setFlashloanPremium(data?.flashloanPremium);
+
+      if (!market) return;
+
+      setMarket(market)
+      zerolendService(market.config, 'zerolend').then((data) => {
+        setData(data?.data);
       });
     }
-  };
+  }, []);
+
+
 
   const theme = createTheme({
     palette: {
@@ -57,7 +58,7 @@ const Home: NextPage = () => {
   });
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} suppressHydrationWarning>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Head>
@@ -73,8 +74,9 @@ const Home: NextPage = () => {
         /> */}
 
       </ThemeProvider>
-      {/* <InfoDatatable data={tableData} flashLoanPremium={flashLoanPremium} /> */}
-      <Datatable data={tableData} />
+      <br />
+      <InfoDatatable name={market.name} data={data} id={market.config.marketName} flashLoanPremium={0} />
+      <Datatable data={data} />
     </div>
   );
 };
