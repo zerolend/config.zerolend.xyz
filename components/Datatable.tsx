@@ -57,9 +57,9 @@ const Datatable = (props: IProps) => {
         },
         { field: "frozen", width: 100, cellRenderer: BooleanRenderer },
         { field: "paused", width: 100, cellRenderer: BooleanRenderer },
-        { field: "canCollateral", headerName: 'Collateral', width: 100, cellRenderer: BooleanRenderer },
         { field: "canBorrow", headerName: 'Borrowable', width: 120, cellRenderer: BooleanRenderer },
         { field: "isIsolated", headerName: 'Isolated', width: 100, cellRenderer: BooleanRenderer },
+        { field: "borrowableInIsolation", headerName: 'Iso Borrowable', width: 140, cellRenderer: BooleanRenderer },
         { field: "flashloanEnabled", headerName: 'Flasloans', width: 100, cellRenderer: BooleanRenderer },
         {
             valueGetter: (params) => {
