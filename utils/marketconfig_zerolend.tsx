@@ -33,6 +33,14 @@ export const marketConfigZerolend = {
     POOL: '0xD3a4DA66EC15a001466F324FA08037f3272BDbE8',
     marketName: "proto_mainnet_rwa_v3",
   },
+  berachain_core: {
+    chainId: 80094,
+    publicJsonRPCUrl: "https://rpc.berachain.com",
+    LENDING_POOL_ADDRESS_PROVIDER: '0x33B13F46a25D836CC0ce91B370305902aB6CF1Be',
+    UI_POOL_DATA_PROVIDER: '0xb518f444E19446E1A3c5225A5233B908941f8be4',
+    POOL: '0xE96Feed449e1E5442937812f97dB63874Cd7aB84',
+    marketName: "proto_berachain_core_v3",
+  },
   zksync: {
     chainId: 324,
     publicJsonRPCUrl: "https://mainnet.era.zksync.io",
