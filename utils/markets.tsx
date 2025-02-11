@@ -18,6 +18,14 @@ export const markets = [
     config: marketConfigZerolend.zksync,
   },
   {
+    name: "abstract",
+    config: marketConfigZerolend.abstract,
+  },
+  {
+    name: "berachain core",
+    config: marketConfigZerolend.berachain_core,
+  },
+  {
     name: "corn mazinet",
     config: marketConfigZerolend.corn_mainnet,
   },

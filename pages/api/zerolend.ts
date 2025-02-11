@@ -18,11 +18,13 @@ const chainIdToRPCProvider: Record<number, string> = {
   48900: "https://zircuit1-mainnet.liquify.com",
   21000000: "https://mainnet.corn-rpc.com",
   196: "https://xlayerrpc.okx.com",
+  2741: "https://api.mainnet.abs.xyz",
 };
 
 const chainIdToExplorerUrl: Record<number, string> = {
   1: "https://etherscan.io",
   324: "https://explorer.zksync.io",
+  2741: "https://abscan.org",
   169: "https://pacific-explorer.manta.network",
   81457: "https://blastexplorer.io",
   80094: "https://berascan.com",
