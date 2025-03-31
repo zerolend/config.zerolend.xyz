@@ -8,7 +8,7 @@ import abi from "../../abis/abi.json";
 import dayjs from "dayjs";
 
 const chainIdToRPCProvider: Record<number, string> = {
-  1: "https://rpc.ankr.com/eth",
+  1: "https://1rpc.io/eth",
   324: "https://mainnet.era.zksync.io",
   169: "https://pacific-rpc.manta.network/http",
   81457: "https://rpc.ankr.com/blast",
